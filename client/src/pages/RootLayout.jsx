@@ -4,6 +4,7 @@ import styled from 'styled-components';
 import map from '../assets/images/map.svg';
 import { useState } from 'react';
 import { useSDK } from '@metamask/sdk-react';
+import { useAccount } from '../contexts/AccountContext';
 
 const Background = styled.div`
   width: 100%;
@@ -64,17 +65,8 @@ const Button = styled.button`
 `;
 
 const RootLayout = () => {
-  const [account, setAccount] = useState(null);
-  const { sdk, connected, connecting, provider, chainId } = useSDK();
+  const { account, connectWallet } = useAccount();
 
-  const connectWallet = async () => {
-    try {
-      const accounts = await sdk?.connect();
-      setAccount(accounts?.[0]);
-    } catch (err) {
-      console.warn(`failed to connect..`, err);
-    }
-  };
   return (
     <Background>
       <NavBar account={account} />

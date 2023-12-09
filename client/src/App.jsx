@@ -4,6 +4,7 @@ import EcoPage from './pages/EcoPage';
 import GlobalPage from './pages/GlobalPage';
 import RootLayout from './pages/RootLayout';
 import ProfilePage from './pages/ProfilePage';
+import { AccountProvider } from './contexts/AccountContext';
 
 const router = createBrowserRouter([
   {
@@ -39,7 +40,11 @@ const router = createBrowserRouter([
 ]);
 
 function App() {
-  return <RouterProvider router={router} />;
+  return (
+    <AccountProvider>
+      <RouterProvider router={router} />
+    </AccountProvider>
+  );
 }
 
 export default App;

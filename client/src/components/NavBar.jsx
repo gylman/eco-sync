@@ -52,14 +52,10 @@ const NavBar = ({ account }) => {
       <Text>EcoSync</Text>
       <Sub>
         <Text>
-          <A to='https://www.google.ru/' target='_blank'>
-            PROFILE
-          </A>
+          <A to='/profile'>PROFILE</A>
         </Text>
         <Text>
-          <A to='https://www.facebook.com/' target='_blank'>
-            ECOSYSTEM
-          </A>
+          <A to='/ecosystem'>ECOSYSTEM</A>
         </Text>
         {account ? (
           <Address>
