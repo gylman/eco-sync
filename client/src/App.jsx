@@ -1,13 +1,45 @@
-import L2 from './components/L2';
-import Sequencer from './components/Sequencer';
-import User from './components/User';
-import L1 from './components/L1';
-import styled from 'styled-components';
 import './index.css';
-import ActionMenu from './components/ActionMenu';
+import { createBrowserRouter, RouterProvider } from 'react-router-dom';
+import EcoPage from './pages/EcoPage';
+import GlobalPage from './pages/GlobalPage';
+import RootLayout from './pages/RootLayout';
+import ProfilePage from './pages/ProfilePage';
+
+const router = createBrowserRouter([
+  {
+    path: '/',
+    element: <RootLayout />,
+    children: [
+      {
+        index: true,
+        element: <GlobalPage />,
+        loader: () => {
+          window.scrollTo(0, 0);
+          return null;
+        },
+      },
+      {
+        path: '/profile',
+        element: <ProfilePage />,
+        loader: () => {
+          window.scrollTo(0, 0);
+          return null;
+        },
+      },
+      {
+        path: '/ecosystem',
+        element: <EcoPage />,
+        loader: () => {
+          window.scrollTo(0, 0);
+          return null;
+        },
+      },
+    ],
+  },
+]);
 
 function App() {
-  return <></>;
+  return <RouterProvider router={router} />;
 }
 
 export default App;
