@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Event Tracker</title>
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.0/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+    <style>
+      /* Add any additional styling you need */
+      .event {
+        margin-bottom: 20px;
+        border: 1px solid #ddd;
+        padding: 10px;
+      }
+    </style>
+  </head>
+  <body>
+    <button id="indexPageButton" type="button">Index</button>
+    <button id="companiesPageButton" type="button">Companies</button>
+    <button id="ecoInclusionPageButton" type="button">
+      Eco Inclusion/Exclusion
+    </button>
+    <button id="ecoStatsPageButton" type="button">Eco Stats</button>
+    <button id="eventsPageButton" type="button">Events</button>
+    <h1>Event Tracker</h1>
+
+    <div id="companyAddedEventContainer">
+        <h2>Company Added Events</h2>
+        <!-- Container for Company Added events -->
+    </div>
+
+    <div id="IncludeEventContainer">
+        <h2>Inclusion to Eco Events</h2>
+        <!-- Container for Trust Granted events -->
+    </div>
+
+    <div id="ExcludeEventContainer">
+        <h2>Exclusion from Eco Events</h2>
+        <!-- Container for Trust Revoked events -->
+    </div>
+
+    <div id="IncludeeStatusUpdateEventContainer">
+        <h2>Trust Changed for Trusted Company Events</h2>
+        <!-- Container for Trust Changed for Trusted Company events -->
+    </div>
+    </div>
+  </body>
+</html>

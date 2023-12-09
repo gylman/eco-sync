@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.0/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+    <title>Create Trust</title>
+  </head>
+  <body>
+    <button id="indexPageButton" type="button">Index</button>
+    <button id="companiesPageButton" type="button">Companies</button>
+    <button id="ecoInclusionPageButton" type="button">
+      Eco Inclusion/Exclusion
+    </button>
+    <button id="ecoStatsPageButton" type="button">Eco Stats</button>
+    <button id="eventsPageButton" type="button">Events</button>
+
+    <h1>Create Trust</h1>
+    <form id="createEcoInclusionForm">
+      <label for="companyAddress">Company Address:</label>
+      <input type="text" id="companyAddress" required />
+      <button type="submit">Create Trust</button>
+    </form>
+
+    <h1>Revoke Trust</h1>
+    <form id="revokeEcoInclusionForm">
+      <label for="revokeCompanyAddress">Company Address:</label>
+      <input type="text" id="revokeCompanyAddress" required />
+      <button type="submit">Revoke Trust</button>
+    </form>
+  </body>
+</html>

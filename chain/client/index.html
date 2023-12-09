@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.0/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+    <title>Company Registry</title>
+  </head>
+  <body>
+    <button id="indexPageButton" type="button">Index</button>
+    <button id="companiesPageButton" type="button">Companies</button>
+    <button id="ecoInclusionPageButton" type="button">
+      Eco Inclusion/Exclusion
+    </button>
+    <button id="ecoStatsPageButton" type="button">Eco Stats</button>
+    <button id="eventsPageButton" type="button">Events</button>
+
+    <h1>Welcome to the Company Registry</h1>
+
+    <form id="companyForm">
+      <label for="name">Name:</label>
+      <input type="text" id="name" required /><br />
+
+      <label for="profilePhoto">Profile Photo URL:</label>
+      <input type="text" id="profilePhoto" required /><br />
+
+      <label for="hasToken">Has Token:</label>
+      <input type="checkbox" id="hasToken" /><br />
+
+      <label for="tokenName">Token Name:</label>
+      <input type="text" id="tokenName" /><br />
+
+      <button type="submit">Add Company</button>
+    </form>
+  </body>
+</html>

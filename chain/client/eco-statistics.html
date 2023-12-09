@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.jsdelivr.net/npm/web3@1.5.0/dist/web3.min.js"></script>
+    <script src="app.js"></script>
+    <title>Eco Statistics</title>
+  </head>
+  <body>
+    <button id="indexPageButton" type="button">Index</button>
+    <button id="companiesPageButton" type="button">Companies</button>
+    <button id="ecoInclusionPageButton" type="button">
+      Eco Inclusion/Exclusion
+    </button>
+    <button id="ecoStatsPageButton" type="button">Eco Stats</button>
+    <button id="eventsPageButton" type="button">Events</button>
+
+    <h1>Eco Statistics</h1>
+
+    <div>
+      <h2>Company with Most Inclusions to Eco Given</h2>
+      <div id="mostInclusionsGiven"></div>
+    </div>
+
+    <div>
+      <h2>Company with Most Inclusions to Eco Received</h2>
+      <div id="mostInclusionsReceived"></div>
+    </div>
+
+    <div>
+      <h2>All Eco Relationships</h2>
+      <ul id="allInclusionsList"></ul>
+    </div>
+  </body>
+</html>
