@@ -7,6 +7,7 @@ import zcash from '../assets/images/zcash.png';
 import monero from '../assets/images/monero.png';
 import ethereum from '../assets/images/ethereum.png';
 import tia from '../assets/images/tia.svg';
+import cuid from 'cuid';
 
 const Container = styled.div`
   width: 100%;
@@ -177,7 +178,7 @@ const GlobalPage = () => {
         <ColHead>Included in</ColHead>
       </Row>
       {includes.map((project) => (
-        <Row>
+        <Row key={cuid()}>
           <ColCell>{project.name}</ColCell>
           <ColCell>
             <img src={project.logo} width='65px' />

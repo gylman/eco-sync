@@ -16,6 +16,7 @@ import tia from '../assets/images/tia.svg';
 import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
 import { uploadFile } from '../utils';
+import cuid from 'cuid';
 const Container = styled.div`
   width: 100%;
   height: calc(100% - 102px);
@@ -331,7 +332,7 @@ const ProfilePage = () => {
   };
   const handleDescription = (e) => {
     setDescription(e.target.value);
-    console.log(logo, name, hasToken, token, description);
+    // console.log(logo, name, hasToken, token, description);
   };
 
   const handleAddToEcoInput = (e) => {
@@ -348,14 +349,11 @@ const ProfilePage = () => {
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
     // Define gas price and gas limit
-    const gasPrice = ethers.parseUnits('5000', 'gwei'); // 10 gwei, for example
+    const gasPrice = ethers.parseUnits('1000', 'gwei'); // 10 gwei, for example
     const gasLimit = 100000; // example value, adjust based on your needs
     // or whatever value you want to send
-
-    const tx = await contract.updateEcosystem(addedToEco, true, {
-      gasPrice: gasPrice,
-      gasLimit: gasLimit,
-    });
+    console.log('address to be sent', addedToEco);
+    const tx = await contract.updateEcosystem(addedToEco, true);
   };
 
   useEffect(() => {
@@ -372,7 +370,7 @@ const ProfilePage = () => {
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
     // Define gas price and gas limit
-    const gasPrice = ethers.parseUnits('100', 'gwei'); // 10 gwei, for example
+    const gasPrice = ethers.parseUnits('1000', 'gwei'); // 10 gwei, for example
     const gasLimit = 100000; // example value, adjust based on your needs
     // or whatever value you want to send
 
@@ -384,15 +382,17 @@ const ProfilePage = () => {
 
     console.log(account);
 
-    const response = await uploadFile(`${account}.${(/** @type {File} */ (logo.file)).name.split('.').at(-1)}`, logo.file);
-    console.log('response', response);
+    const response = await uploadFile(
+      `${account}.${/** @type {File} */ (logo.file).name.split('.').at(-1)}`,
+      logo.file
+    );
+    // console.log('response', response);
 
-    const logoUrl = `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${response.IpfsHash}`;
-
-    const tx = await contract.addCompany(name, logoUrl, hasToken, token, {
-      gasPrice: gasPrice,
-      gasLimit: gasLimit,
-    });
+    const logoUrl = `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+      response.IpfsHash
+    }`;
+    console.log(name, 'hello_world', hasToken, token);
+    const tx = await contract.addCompany(name, 'hello_world', hasToken, token);
   };
 
   return (
@@ -447,7 +447,7 @@ const ProfilePage = () => {
               <ColHead>Includes:</ColHead>
               <ColBody>
                 {includes.map((project) => (
-                  <Project key={project.address}>
+                  <Project key={cuid()}>
                     <ProjectLogo width='65px' src={project.logo} />
                     <ProjectDetails>
                       <ProjectName>{project.name}</ProjectName>
@@ -462,7 +462,7 @@ const ProfilePage = () => {
               <ColHead>Is included in:</ColHead>
               <ColBody>
                 {includes.map((project) => (
-                  <Project key={project.address}>
+                  <Project key={cuid()}>
                     <ProjectLogo width='65px' src={project.logo} />
                     <ProjectDetails>
                       <ProjectName>{project.name}</ProjectName>

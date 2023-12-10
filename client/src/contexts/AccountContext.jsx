@@ -10,7 +10,7 @@ export const AccountProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
   const { sdk, connected, connecting, provider, chainId } = useSDK();
 
-  const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
+  const contractAddress = '0x1FFa5e8B85B3dC1462ea5362190f9697Ba25c1Ca';
   const contractABI = [
     {
       inputs: [
@@ -330,7 +330,6 @@ export const AccountProvider = ({ children }) => {
       type: 'function',
     },
   ];
-
   const connectWallet = async () => {
     try {
       const accounts = await sdk?.connect();
