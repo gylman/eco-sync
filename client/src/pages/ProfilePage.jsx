@@ -17,17 +17,16 @@ import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
 const Container = styled.div`
   width: 100%;
-  align-items: center;
-  height: 100%;
-  flex-direction: column;
-  display: flex;
-  gap: 100px;
+  height: calc(100% - 102px);
+  overflow-y: auto;
 `;
 
 const Tabs = styled.div`
   width: 100%;
   display: flex;
   height: 100px;
+  position: sticky;
+  top: 0;
 `;
 
 const Tab = styled.div`
@@ -56,6 +55,8 @@ const Text = styled.p`
 `;
 
 const Content = styled.div`
+  padding-top: 64px;
+  padding-bottom: 32px;
   display: flex;
   gap: 70px;
   width: 100%;

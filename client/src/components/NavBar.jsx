@@ -13,7 +13,7 @@ const Main = styled.div`
 
 const Sub = styled.div`
   display: flex;
-  align-items: centers;
+  align-items: center;
   gap: 63px;
 `;
 
