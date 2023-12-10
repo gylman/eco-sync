@@ -144,6 +144,7 @@ const Cols = styled.div`
   display: flex;
   gap: 24px;
   width: 100%;
+  justify-content: center;
 `;
 
 const Col = styled.div`
@@ -169,7 +170,8 @@ const ColBody = styled.ul`
   gap: 20px;
   flex-direction: column;
   padding: 20px;
-  overflow: scroll;
+  height: 430px;
+  overflow-y: scroll;
   border-radius: 8px;
 `;
 const Project = styled.li`
@@ -197,7 +199,7 @@ const ProjectName = styled.p`
 const ProjectAddress = styled.p`
   color: #fff;
   font-family: Dosis;
-  font-size: 24px;
+  font-size: 20px;
   font-style: normal;
   font-weight: 500;
   line-height: normal;
