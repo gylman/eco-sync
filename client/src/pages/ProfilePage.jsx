@@ -15,6 +15,7 @@ import ethereum from '../assets/images/ethereum.png';
 import tia from '../assets/images/tia.svg';
 import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
+import { uploadFile } from '../utils';
 const Container = styled.div`
   width: 100%;
   height: calc(100% - 102px);
@@ -271,7 +272,7 @@ const ProfilePage = () => {
       : setProfileIsActive(false);
   };
 
-  const [logo, setLogo] = useState('/pre-ipfs');
+  const [logo, setLogo] = useState(null);
   const [name, setName] = useState('');
   const [hasToken, setHasToken] = useState(false);
   const [token, setToken] = useState('');
@@ -279,9 +280,6 @@ const ProfilePage = () => {
 
   const handleName = (e) => {
     setName(e.target.value);
-  };
-  const handleLogo = (e) => {
-    setLogo(e.target.value);
   };
   const handleToken = (e) => {
     setToken(e.target.value);
@@ -629,7 +627,20 @@ const ProfilePage = () => {
     const gasLimit = 100000; // example value, adjust based on your needs
     // or whatever value you want to send
 
-    const tx = await contract.addCompany(name, logo, hasToken, token, {
+    // upload company logo file
+    if (!logo) {
+      alert('Please upload a logo');
+      return;
+    }
+
+    console.log(account);
+
+    const response = await uploadFile(`${account}.${(/** @type {File} */ (logo.file)).name.split('.').at(-1)}`, logo.file);
+    console.log('response', response);
+
+    const logoUrl = `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${response.IpfsHash}`;
+
+    const tx = await contract.addCompany(name, logoUrl, hasToken, token, {
       gasPrice: gasPrice,
       gasLimit: gasLimit,
     });
@@ -638,10 +649,10 @@ const ProfilePage = () => {
   return (
     <Container>
       <Tabs>
-        <Tab active={profileIsActive} onClick={handleTab}>
+        <Tab active={profileIsActive ? '' : undefined} onClick={handleTab}>
           <Text>Profile</Text>
         </Tab>
-        <Tab active={!profileIsActive} onClick={handleTab}>
+        <Tab active={!profileIsActive ? '' : undefined} onClick={handleTab}>
           <Text>Ecosystem</Text>
         </Tab>
       </Tabs>
@@ -649,7 +660,7 @@ const ProfilePage = () => {
         <Content>
           <Logo>
             <Label>Logo</Label>
-            <CircleImageUploader />
+            <CircleImageUploader image={logo} setImage={setLogo} />
           </Logo>
           <FieldsAndButton>
             <Fields>

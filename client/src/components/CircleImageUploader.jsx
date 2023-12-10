@@ -21,15 +21,16 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
-const CircleImageUploader = () => {
-  const [imageSrc, setImageSrc] = useState(null);
-
+const CircleImageUploader = ({ image = null, setImage }) => {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     const reader = new FileReader();
 
     reader.onloadend = () => {
-      setImageSrc(reader.result);
+      setImage({
+        src: reader.result,
+        file,
+      });
     };
 
     if (file) {
@@ -45,8 +46,8 @@ const CircleImageUploader = () => {
         onChange={handleImageChange}
         accept='image/*'
       />
-      <Circle htmlFor='image-upload' imgsrc={imageSrc}>
-        {!imageSrc && '+'}
+      <Circle htmlFor='image-upload' imgsrc={image?.src}>
+        {!image?.src && '+'}
       </Circle>
     </div>
   );
