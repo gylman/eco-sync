@@ -4,58 +4,10 @@ import radius from '../assets/images/radius.png';
 import { Button } from './RootLayout';
 import { useAccount } from '../contexts/AccountContext';
 import CircleImageUploader from '../components/CircleImageUploader';
-import add from '../assets/images/add.svg';
-import del from '../assets/images/delete.svg';
-import luna from '../assets/images/luna.png';
-import dot from '../assets/images/dot.png';
-import tcash from '../assets/images/tcash.png';
-import zcash from '../assets/images/zcash.png';
-import monero from '../assets/images/monero.png';
-import ethereum from '../assets/images/ethereum.png';
-import tia from '../assets/images/tia.svg';
 import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
 import { uploadFile } from '../utils';
-import cuid from 'cuid';
-import { useParams } from 'react-router';
-const Container = styled.div`
-  width: 100%;
-  height: calc(100% - 102px);
-  overflow-y: hidden;
-`;
-
-const Tabs = styled.div`
-  width: 100%;
-  display: flex;
-  height: 70px;
-  position: sticky;
-  top: 0;
-`;
-
-const Tab = styled.div`
-  display: flex;
-  width: 100%;
-  flex: 1;
-  padding: 10px 0px 10px 0px;
-  justify-content: center;
-  align-items: center;
-  flex-shrink: 0;
-  border-radius: 0px 0px 200px 200px;
-  cursor: pointer;
-  background: ${({ active }) =>
-    active
-      ? 'linear-gradient(90deg, #bb98e9 1.8%, #5100bb 94.91%)'
-      : 'linear-gradient(180deg, rgba(187, 152, 233, 0.50) 0%, rgba(81, 0, 187, 0.00) 100%)'};
-`;
-
-const Text = styled.p`
-  color: #fff;
-  font-family: Dosis;
-  font-size: 48px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: 29px;
-`;
+import { useLocation, useParams } from 'react-router';
 
 const Content = styled.div`
   padding-top: 64px;
@@ -124,207 +76,17 @@ export const Input = styled.input`
   line-height: normal;
 `;
 
-const EcoContent = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 55px;
-  width: 100%;
-  padding: 0 40px;
-`;
-
-const FieldAndButton = styled.div`
-  display: flex;
-  gap: 20px;
-  align-items: flex-end;
-  width: 100%;
-  justify-content: center;
-  margin-top: 40px;
-`;
-
-const Add = styled.img`
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.09);
-  }
-`;
-
-const Cols = styled.div`
-  display: flex;
-  gap: 24px;
-  width: 100%;
-  justify-content: center;
-`;
-
-const Col = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 10px;
-`;
-
-const ColHead = styled.p`
-  color: #fff;
-  text-align: center;
-  font-family: Dosis;
-  font-size: 32px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-`;
-
-const ColBody = styled.ul`
-  display: flex;
-  background: rgba(0, 173, 209, 0.2);
-  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
-  gap: 20px;
-  flex-direction: column;
-  padding: 20px;
-  overflow-y: scroll;
-  border-radius: 8px;
-  height: 40%;
-`;
-const Project = styled.li`
-  display: flex;
-  align-items: center;
-  gap: 20px;
-`;
-
-const ProjectLogo = styled.img`
-  border-radius: 50%;
-`;
-const ProjectDetails = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-const ProjectName = styled.p`
-  color: #fff;
-  font-family: Dosis;
-  font-size: 24px;
-  font-style: normal;
-  font-weight: 600;
-  line-height: normal;
-`;
-const ProjectAddress = styled.p`
-  color: #fff;
-  font-family: Dosis;
-  font-size: 20px;
-  font-style: normal;
-  font-weight: 500;
-  line-height: normal;
-`;
-
-const Del = styled.img`
-  cursor: pointer;
-  &:hover {
-    transform: scale(1.05);
-  }
-`;
-
-const includes = [
-  {
-    logo: ethereum,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
-  },
-  {
-    logo: monero,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
-  },
-  {
-    logo: dot,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
-  },
-  {
-    logo: zcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
-  },
-  {
-    logo: luna,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
-  },
-  {
-    logo: tcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
-  },
-  {
-    logo: tia,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
-  },
-  {
-    logo: ethereum,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
-  },
-  {
-    logo: monero,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
-  },
-  {
-    logo: dot,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
-  },
-  {
-    logo: zcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
-  },
-  {
-    logo: luna,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
-  },
-  {
-    logo: tcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
-  },
-  {
-    logo: tia,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
-  },
-];
-
 const ProfilePage = () => {
+  const { pathname } = useLocation();
+
   const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
-  const [profileIsActive, setProfileIsActive] = useState(true);
-  const handleTab = (event) => {
-    event.preventDefault();
-    console.log(event.target.textContent);
-    event.target.textContent === 'Profile'
-      ? setProfileIsActive(true)
-      : setProfileIsActive(false);
-  };
 
   const [logo, setLogo] = useState(null);
   const [name, setName] = useState('');
   const [hasToken, setHasToken] = useState(false);
   const [token, setToken] = useState('');
   const [description, setDescription] = useState('');
-  const [addedToEco, setAddedToEco] = useState('');
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -335,18 +97,6 @@ const ProfilePage = () => {
   const handleDescription = (e) => {
     setDescription(e.target.value);
     // console.log(logo, name, hasToken, token, description);
-  };
-
-  const handleAddToEcoInput = (e) => {
-    setAddedToEco(e.target.value);
-  };
-
-  const addToEco = async () => {
-    const provider = new Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
-    const signer = provider.getSigner();
-    const contract = new ethers.Contract(contractAddress, contractABI, signer);
-    const tx = await contract.updateEcosystem(addedToEco, true);
   };
 
   useEffect(() => {
@@ -380,86 +130,33 @@ const ProfilePage = () => {
   };
 
   return (
-    <Container>
-      <Tabs>
-        <Tab active={profileIsActive ? '' : undefined} onClick={handleTab}>
-          <Text>Profile</Text>
-        </Tab>
-        <Tab active={!profileIsActive ? '' : undefined} onClick={handleTab}>
-          <Text>Ecosystem</Text>
-        </Tab>
-      </Tabs>
-      {profileIsActive ? (
-        <Content>
-          <Logo>
-            <Label>Logo</Label>
-            <CircleImageUploader image={logo} setImage={setLogo} />
-          </Logo>
-          <FieldsAndButton>
-            <Fields>
-              <Field>
-                <Label>Address</Label>
-                <Input value={address} disabled />
-              </Field>
-              <Field>
-                <Label>Name</Label>
-                <Input onChange={handleName} />
-              </Field>
-              <Field>
-                <Label>Token</Label>
-                <Input onChange={handleToken} />
-              </Field>
-              <Field>
-                <Label>Description</Label>
-                <Input onChange={handleDescription} />
-              </Field>
-            </Fields>
-            <Button onClick={handleSave}>Save</Button>
-          </FieldsAndButton>
-        </Content>
-      ) : (
-        <EcoContent>
-          <FieldAndButton>
-            <Field>
-              <Label>Add the project address to ecosystem</Label>
-              <Input onChange={handleAddToEcoInput} />
-            </Field>
-            <Add src={add} onClick={addToEco} />
-          </FieldAndButton>
-          <Cols>
-            <Col>
-              <ColHead>Includes:</ColHead>
-              <ColBody>
-                {includes.map((project) => (
-                  <Project key={cuid()}>
-                    <ProjectLogo width='65px' src={project.logo} />
-                    <ProjectDetails>
-                      <ProjectName>{project.name}</ProjectName>
-                      <ProjectAddress>{project.address}</ProjectAddress>
-                    </ProjectDetails>
-                    <Del src={del} width='46px' />
-                  </Project>
-                ))}
-              </ColBody>
-            </Col>
-            <Col>
-              <ColHead>Is included in:</ColHead>
-              <ColBody>
-                {includes.map((project) => (
-                  <Project key={cuid()}>
-                    <ProjectLogo width='65px' src={project.logo} />
-                    <ProjectDetails>
-                      <ProjectName>{project.name}</ProjectName>
-                      <ProjectAddress>{project.address}</ProjectAddress>
-                    </ProjectDetails>
-                  </Project>
-                ))}
-              </ColBody>{' '}
-            </Col>
-          </Cols>
-        </EcoContent>
-      )}
-    </Container>
+    <Content>
+      <Logo>
+        <Label>Logo</Label>
+        <CircleImageUploader image={logo} setImage={setLogo} />
+      </Logo>
+      <FieldsAndButton>
+        <Fields>
+          <Field>
+            <Label>Address</Label>
+            <Input value={address} disabled />
+          </Field>
+          <Field>
+            <Label>Name</Label>
+            <Input onChange={handleName} />
+          </Field>
+          <Field>
+            <Label>Token</Label>
+            <Input onChange={handleToken} />
+          </Field>
+          <Field>
+            <Label>Description</Label>
+            <Input onChange={handleDescription} />
+          </Field>
+        </Fields>
+        <Button onClick={handleSave}>Save</Button>
+      </FieldsAndButton>
+    </Content>
   );
 };
 

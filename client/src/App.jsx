@@ -5,6 +5,7 @@ import GlobalPage from './pages/GlobalPage';
 import RootLayout from './pages/RootLayout';
 import ProfilePage from './pages/ProfilePage';
 import { AccountProvider } from './contexts/AccountContext';
+import Project from './pages/Project';
 
 const router = createBrowserRouter([
   {
@@ -21,16 +22,8 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: '/profile/:address',
-        element: <ProfilePage />,
-        loader: () => {
-          window.scrollTo(0, 0);
-          return null;
-        },
-      },
-      {
-        path: '/ecosystem/:address',
-        element: <EcoPage />,
+        path: '/project/:address',
+        element: <Project />,
         loader: () => {
           window.scrollTo(0, 0);
           return null;
