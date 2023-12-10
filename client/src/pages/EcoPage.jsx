@@ -34,6 +34,11 @@ export const Input = styled.input`
 `;
 
 const EcoPage = () => {
+  // Function with args array of companies returns the intersection of the companies included in their ecosystem
+  // Function with args array of companies returns the union of the companies included in their ecosystem
+  // Function that sorts by the number of inclusion in other ecosystems
+  // Function that sorts by the number of companies in ecosystem
+
   return <div>EcoPage</div>;
 };
 
