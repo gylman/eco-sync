@@ -334,6 +334,7 @@ export const AccountProvider = ({ children }) => {
     try {
       const accounts = await sdk?.connect();
       setAccount(accounts?.[0]);
+      return accounts?.[0];
     } catch (err) {
       console.warn(`failed to connect..`, err);
     }

@@ -18,6 +18,9 @@ import { Web3Provider } from '@ethersproject/providers';
 import { uploadFile } from '../utils';
 import cuid from 'cuid';
 import { useParams } from 'react-router';
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
+
 const Container = styled.div`
   width: 100%;
   height: calc(100% - 102px);
@@ -307,9 +310,21 @@ const includes = [
   },
 ];
 
+const USERS_QUERY = (address) => gql`
+  {
+    company(id: "${address}") { id name walletAddress profilePhoto }
+  }
+`
+
 const ProfilePage = () => {
   const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
+  const { loading, error, data } = useQuery(USERS_QUERY(account));
+
+  useEffect(() => {
+    console.log('data', data);
+  }, [data]);
+
   const [profileIsActive, setProfileIsActive] = useState(true);
   const handleTab = (event) => {
     event.preventDefault();
@@ -399,22 +414,22 @@ const ProfilePage = () => {
             <Fields>
               <Field>
                 <Label>Address</Label>
-                <Input value={address} disabled />
+                <Input value={address} readOnly />
               </Field>
               <Field>
                 <Label>Name</Label>
-                <Input onChange={handleName} />
+                <Input defaultValue={data?.company?.name} onChange={handleName} readOnly={loading || !!data.company} />
               </Field>
               <Field>
                 <Label>Token</Label>
-                <Input onChange={handleToken} />
+                <Input defaultValue={data?.company?.token} onChange={handleToken} readOnly={loading || !!data.company} />
               </Field>
               <Field>
                 <Label>Description</Label>
-                <Input onChange={handleDescription} />
+                <Input defaultValue={data?.company?.description} onChange={handleDescription} readOnly={loading || !!data.company} />
               </Field>
             </Fields>
-            <Button onClick={handleSave}>Save</Button>
+            {!data?.company && <Button disabled={!account || loading} onClick={handleSave}>Save</Button>}
           </FieldsAndButton>
         </Content>
       ) : (
