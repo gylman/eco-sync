@@ -21,7 +21,7 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: '/profile',
+        path: '/profile/:address',
         element: <ProfilePage />,
         loader: () => {
           window.scrollTo(0, 0);
@@ -29,7 +29,7 @@ const router = createBrowserRouter([
         },
       },
       {
-        path: '/ecosystem',
+        path: '/ecosystem/:address',
         element: <EcoPage />,
         loader: () => {
           window.scrollTo(0, 0);

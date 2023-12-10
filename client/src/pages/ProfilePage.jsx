@@ -17,6 +17,7 @@ import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
 import { uploadFile } from '../utils';
 import cuid from 'cuid';
+import { useParams } from 'react-router';
 const Container = styled.div`
   width: 100%;
   height: calc(100% - 102px);
@@ -307,6 +308,7 @@ const includes = [
 ];
 
 const ProfilePage = () => {
+  const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
   const [profileIsActive, setProfileIsActive] = useState(true);
   const handleTab = (event) => {
@@ -343,16 +345,7 @@ const ProfilePage = () => {
     const provider = new Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
-
-    // Calling a function that does not change blockchain state and returns a value
-
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-    // Define gas price and gas limit
-    const gasPrice = ethers.parseUnits('1000', 'gwei'); // 10 gwei, for example
-    const gasLimit = 100000; // example value, adjust based on your needs
-    // or whatever value you want to send
-    console.log('address to be sent', addedToEco);
     const tx = await contract.updateEcosystem(addedToEco, true);
   };
 
@@ -364,16 +357,7 @@ const ProfilePage = () => {
     const provider = new Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
-
-    // Calling a function that does not change blockchain state and returns a value
-
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
-
-    // Define gas price and gas limit
-    const gasPrice = ethers.parseUnits('1000', 'gwei'); // 10 gwei, for example
-    const gasLimit = 100000; // example value, adjust based on your needs
-    // or whatever value you want to send
-
     // upload company logo file
     if (!logo) {
       alert('Please upload a logo');
@@ -392,7 +376,7 @@ const ProfilePage = () => {
       response.IpfsHash
     }`;
     console.log(name, 'hello_world', hasToken, token);
-    const tx = await contract.addCompany(name, 'hello_world', hasToken, token);
+    const tx = await contract.addCompany(name, logoUrl, hasToken, token);
   };
 
   return (
@@ -415,7 +399,7 @@ const ProfilePage = () => {
             <Fields>
               <Field>
                 <Label>Address</Label>
-                <Input value={account} disabled />
+                <Input value={address} disabled />
               </Field>
               <Field>
                 <Label>Name</Label>

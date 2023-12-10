@@ -11,7 +11,6 @@ import cuid from 'cuid';
 
 const Container = styled.div`
   width: 100%;
-  border: 2px solid #fff;
   height: 100%;
   display: flex;
   flex-direction: column;
@@ -30,7 +29,7 @@ const ColHead = styled.p`
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
-  border: 1px solid #fff;
+  border: 4px solid #fff;
   padding: 20px;
   width: 400px;
   display: flex;
@@ -44,7 +43,7 @@ const ColCell = styled.p`
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
-  border: 1px solid #fff;
+  border: 4px solid #fff;
   padding: 20px;
   width: 400px;
   display: flex;

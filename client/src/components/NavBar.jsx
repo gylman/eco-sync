@@ -52,10 +52,10 @@ const NavBar = ({ account }) => {
       <Text>EcoSync</Text>
       <Sub>
         <Text>
-          <A to='/profile'>PROFILE</A>
+          <A to={`/profile/${account}`}>PROFILE</A>
         </Text>
         <Text>
-          <A to='/ecosystem'>ECOSYSTEM</A>
+          <A to={`/ecosystem/${account}`}>ECOSYSTEM</A>
         </Text>
         <Text>
           <A to='/global'>GLOBAL</A>

@@ -39,7 +39,48 @@ const EcoPage = () => {
   // Function that sorts by the number of inclusion in other ecosystems
   // Function that sorts by the number of companies in ecosystem
 
-  return <div>EcoPage</div>;
+  return (
+    <EcoContent>
+      <FieldAndButton>
+        <Field>
+          <Label>Add the project address to ecosystem</Label>
+          <Input onChange={handleAddToEcoInput} />
+        </Field>
+        <Add src={add} onClick={addToEco} />
+      </FieldAndButton>
+      <Cols>
+        <Col>
+          <ColHead>Includes:</ColHead>
+          <ColBody>
+            {includes.map((project) => (
+              <Project key={cuid()}>
+                <ProjectLogo width='65px' src={project.logo} />
+                <ProjectDetails>
+                  <ProjectName>{project.name}</ProjectName>
+                  <ProjectAddress>{project.address}</ProjectAddress>
+                </ProjectDetails>
+                <Del src={del} width='46px' />
+              </Project>
+            ))}
+          </ColBody>
+        </Col>
+        <Col>
+          <ColHead>Is included in:</ColHead>
+          <ColBody>
+            {includes.map((project) => (
+              <Project key={cuid()}>
+                <ProjectLogo width='65px' src={project.logo} />
+                <ProjectDetails>
+                  <ProjectName>{project.name}</ProjectName>
+                  <ProjectAddress>{project.address}</ProjectAddress>
+                </ProjectDetails>
+              </Project>
+            ))}
+          </ColBody>{' '}
+        </Col>
+      </Cols>
+    </EcoContent>
+  );
 };
 
 export default EcoPage;
