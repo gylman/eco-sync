@@ -170,7 +170,7 @@ const ColBody = styled.ul`
   gap: 20px;
   flex-direction: column;
   padding: 20px;
-  height: 430px;
+  height: 80%;
   overflow-y: scroll;
   border-radius: 8px;
 `;
@@ -319,7 +319,7 @@ const ProfilePage = () => {
               <ColHead>Includes:</ColHead>
               <ColBody>
                 {includes.map((project) => (
-                  <Project>
+                  <Project key={project.address}>
                     <ProjectLogo width='65px' src={project.logo} />
                     <ProjectDetails>
                       <ProjectName>{project.name}</ProjectName>
@@ -334,7 +334,7 @@ const ProfilePage = () => {
               <ColHead>Is included in:</ColHead>
               <ColBody>
                 {includes.map((project) => (
-                  <Project>
+                  <Project key={project.address}>
                     <ProjectLogo width='65px' src={project.logo} />
                     <ProjectDetails>
                       <ProjectName>{project.name}</ProjectName>

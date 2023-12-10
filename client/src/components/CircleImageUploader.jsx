@@ -9,7 +9,7 @@ const Circle = styled.label`
   height: 100px;
   border-radius: 50%;
   background-color: #f0f0f0;
-  background-image: url(${(props) => props.imgSrc});
+  background-image: url(${(props) => props.imgsrc});
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -45,7 +45,7 @@ const CircleImageUploader = () => {
         onChange={handleImageChange}
         accept='image/*'
       />
-      <Circle htmlFor='image-upload' imgSrc={imageSrc}>
+      <Circle htmlFor='image-upload' imgsrc={imageSrc}>
         {!imageSrc && '+'}
       </Circle>
     </div>
