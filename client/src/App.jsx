@@ -13,6 +13,7 @@ const router = createBrowserRouter([
     children: [
       {
         index: true,
+        path: '/global',
         element: <GlobalPage />,
         loader: () => {
           window.scrollTo(0, 0);

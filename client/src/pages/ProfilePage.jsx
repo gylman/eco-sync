@@ -18,13 +18,13 @@ import { Web3Provider } from '@ethersproject/providers';
 const Container = styled.div`
   width: 100%;
   height: calc(100% - 102px);
-  overflow-y: auto;
+  overflow-y: hidden;
 `;
 
 const Tabs = styled.div`
   width: 100%;
   display: flex;
-  height: 100px;
+  height: 70px;
   position: sticky;
   top: 0;
 `;
@@ -33,7 +33,7 @@ const Tab = styled.div`
   display: flex;
   width: 100%;
   flex: 1;
-  padding: 20px 0px 21px 0px;
+  padding: 10px 0px 10px 0px;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
@@ -134,6 +134,8 @@ const FieldAndButton = styled.div`
   gap: 20px;
   align-items: flex-end;
   width: 100%;
+  justify-content: center;
+  margin-top: 40px;
 `;
 
 const Add = styled.img`
@@ -173,9 +175,9 @@ const ColBody = styled.ul`
   gap: 20px;
   flex-direction: column;
   padding: 20px;
-  height: 80%;
   overflow-y: scroll;
   border-radius: 8px;
+  height: 40%;
 `;
 const Project = styled.li`
   display: flex;
@@ -258,10 +260,52 @@ const includes = [
       '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
     name: 'Celestia',
   },
+  {
+    logo: ethereum,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'Ethereum',
+  },
+  {
+    logo: monero,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'Monero',
+  },
+  {
+    logo: dot,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'Pokadot',
+  },
+  {
+    logo: zcash,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'ZCash',
+  },
+  {
+    logo: luna,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'Luna',
+  },
+  {
+    logo: tcash,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'Tornado Cash',
+  },
+  {
+    logo: tia,
+    address:
+      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+    name: 'Celestia',
+  },
 ];
 
 const ProfilePage = () => {
-  const { account } = useAccount();
+  const { account, contractAddress, contractABI } = useAccount();
   const [profileIsActive, setProfileIsActive] = useState(true);
   const handleTab = (event) => {
     event.preventDefault();
@@ -276,6 +320,7 @@ const ProfilePage = () => {
   const [hasToken, setHasToken] = useState(false);
   const [token, setToken] = useState('');
   const [description, setDescription] = useState('');
+  const [addedToEco, setAddedToEco] = useState('');
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -291,6 +336,30 @@ const ProfilePage = () => {
     console.log(logo, name, hasToken, token, description);
   };
 
+  const handleAddToEcoInput = (e) => {
+    setAddedToEco(e.target.value);
+  };
+
+  const addToEco = async () => {
+    const provider = new Web3Provider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+    const signer = provider.getSigner();
+
+    // Calling a function that does not change blockchain state and returns a value
+
+    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+
+    // Define gas price and gas limit
+    const gasPrice = ethers.parseUnits('5000', 'gwei'); // 10 gwei, for example
+    const gasLimit = 100000; // example value, adjust based on your needs
+    // or whatever value you want to send
+
+    const tx = await contract.updateEcosystem(addedToEco, true, {
+      gasPrice: gasPrice,
+      gasLimit: gasLimit,
+    });
+  };
+
   useEffect(() => {
     token && !hasToken && setHasToken(true);
   }, [hasToken, token]);
@@ -299,333 +368,13 @@ const ProfilePage = () => {
     const provider = new Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
-    const contractAddress = '0x5FbDB2315678afecb367f032d93F642f64180aa3';
-    const contractABI = [
-      {
-        inputs: [
-          {
-            internalType: 'string',
-            name: '_name',
-            type: 'string',
-          },
-          {
-            internalType: 'string',
-            name: '_profilePhoto',
-            type: 'string',
-          },
-          {
-            internalType: 'bool',
-            name: '_hasToken',
-            type: 'bool',
-          },
-          {
-            internalType: 'string',
-            name: '_tokenName',
-            type: 'string',
-          },
-        ],
-        name: 'addCompany',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'walletAddress',
-            type: 'address',
-          },
-          {
-            indexed: false,
-            internalType: 'string',
-            name: 'name',
-            type: 'string',
-          },
-        ],
-        name: 'CompanyAdded',
-        type: 'event',
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'company1',
-            type: 'address',
-          },
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'company2',
-            type: 'address',
-          },
-          {
-            indexed: false,
-            internalType: 'bool',
-            name: 'isPartnership',
-            type: 'bool',
-          },
-        ],
-        name: 'EcosystemUpdated',
-        type: 'event',
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'includer',
-            type: 'address',
-          },
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'includee',
-            type: 'address',
-          },
-        ],
-        name: 'Exclude',
-        type: 'event',
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'includer',
-            type: 'address',
-          },
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'includee',
-            type: 'address',
-          },
-        ],
-        name: 'Include',
-        type: 'event',
-      },
-      {
-        anonymous: false,
-        inputs: [
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'observer',
-            type: 'address',
-          },
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'includedCompany',
-            type: 'address',
-          },
-          {
-            indexed: true,
-            internalType: 'address',
-            name: 'otherParty',
-            type: 'address',
-          },
-          {
-            indexed: false,
-            internalType: 'bool',
-            name: 'included',
-            type: 'bool',
-          },
-        ],
-        name: 'IncludeeStatusUpdate',
-        type: 'event',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'address',
-            name: '_company2',
-            type: 'address',
-          },
-          {
-            internalType: 'bool',
-            name: '_includesInEco',
-            type: 'bool',
-          },
-        ],
-        name: 'updateEcosystem',
-        outputs: [],
-        stateMutability: 'nonpayable',
-        type: 'function',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
-        ],
-        name: 'companies',
-        outputs: [
-          {
-            internalType: 'string',
-            name: 'name',
-            type: 'string',
-          },
-          {
-            internalType: 'address',
-            name: 'walletAddress',
-            type: 'address',
-          },
-          {
-            internalType: 'string',
-            name: 'profilePhoto',
-            type: 'string',
-          },
-          {
-            internalType: 'bool',
-            name: 'hasToken',
-            type: 'bool',
-          },
-          {
-            internalType: 'string',
-            name: 'tokenName',
-            type: 'string',
-          },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'uint256',
-            name: 'index',
-            type: 'uint256',
-          },
-        ],
-        name: 'companyAddressAtIndex',
-        outputs: [
-          {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'uint256',
-            name: '',
-            type: 'uint256',
-          },
-        ],
-        name: 'companyAddresses',
-        outputs: [
-          {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
-          {
-            internalType: 'address',
-            name: '',
-            type: 'address',
-          },
-        ],
-        name: 'ecoMapping',
-        outputs: [
-          {
-            internalType: 'bool',
-            name: 'includesInEco',
-            type: 'bool',
-          },
-          {
-            internalType: 'uint256',
-            name: 'createdTimestamp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'removedTimestamp',
-            type: 'uint256',
-          },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        inputs: [
-          {
-            internalType: 'address',
-            name: '_company1',
-            type: 'address',
-          },
-          {
-            internalType: 'address',
-            name: '_company2',
-            type: 'address',
-          },
-        ],
-        name: 'getInclusionInfo',
-        outputs: [
-          {
-            internalType: 'bool',
-            name: 'includesInEco',
-            type: 'bool',
-          },
-          {
-            internalType: 'uint256',
-            name: 'createdTimestamp',
-            type: 'uint256',
-          },
-          {
-            internalType: 'uint256',
-            name: 'removedTimestamp',
-            type: 'uint256',
-          },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-      },
-      {
-        inputs: [],
-        name: 'totalCompanies',
-        outputs: [
-          {
-            internalType: 'uint256',
-            name: '',
-            type: 'uint256',
-          },
-        ],
-        stateMutability: 'view',
-        type: 'function',
-      },
-    ];
 
     // Calling a function that does not change blockchain state and returns a value
 
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
 
     // Define gas price and gas limit
-    const gasPrice = ethers.parseUnits('10000', 'gwei'); // 10 gwei, for example
+    const gasPrice = ethers.parseUnits('100', 'gwei'); // 10 gwei, for example
     const gasLimit = 100000; // example value, adjust based on your needs
     // or whatever value you want to send
 
@@ -678,9 +427,9 @@ const ProfilePage = () => {
           <FieldAndButton>
             <Field>
               <Label>Add the project address to ecosystem</Label>
-              <Input />
+              <Input onChange={handleAddToEcoInput} />
             </Field>
-            <Add src={add} />
+            <Add src={add} onClick={addToEco} />
           </FieldAndButton>
           <Cols>
             <Col>
