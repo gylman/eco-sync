@@ -4,7 +4,15 @@ import radius from '../assets/images/radius.png';
 import { Button } from './RootLayout';
 import { useAccount } from '../contexts/AccountContext';
 import CircleImageUploader from '../components/CircleImageUploader';
-
+import add from '../assets/images/add.svg';
+import del from '../assets/images/delete.svg';
+import luna from '../assets/images/luna.png';
+import dot from '../assets/images/dot.png';
+import tcash from '../assets/images/tcash.png';
+import zcash from '../assets/images/zcash.png';
+import monero from '../assets/images/monero.png';
+import ethereum from '../assets/images/ethereum.png';
+import tia from '../assets/images/tia.svg';
 const Container = styled.div`
   width: 100%;
   align-items: center;
@@ -79,12 +87,12 @@ const Fields = styled.div`
   flex-direction: column;
   gap: 25px;
 `;
-const Field = styled.div`
+export const Field = styled.div`
   display: flex;
   flex-direction: column;
   gap: 5px;
 `;
-const Label = styled.span`
+export const Label = styled.span`
   color: #909090;
   font-family: Dosis;
   font-size: 24px;
@@ -92,9 +100,9 @@ const Label = styled.span`
   font-weight: 500;
   line-height: normal;
 `;
-const Input = styled.input`
+export const Input = styled.input`
   display: flex;
-  max-width: 579px;
+  min-width: 520px;
   width: 100%;
   padding: 9px 14px;
   align-items: center;
@@ -110,6 +118,97 @@ const Input = styled.input`
   line-height: normal;
 `;
 
+const EcoContent = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 55px;
+  width: 100%;
+  padding: 0 40px;
+`;
+
+const FieldAndButton = styled.div`
+  display: flex;
+  gap: 20px;
+  align-items: flex-end;
+  width: 100%;
+`;
+
+const Add = styled.img`
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.09);
+  }
+`;
+
+const Cols = styled.div`
+  display: flex;
+  gap: 24px;
+  width: 100%;
+`;
+
+const Col = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+`;
+
+const ColHead = styled.p`
+  color: #fff;
+  text-align: center;
+  font-family: Dosis;
+  font-size: 32px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+const ColBody = styled.ul`
+  display: flex;
+  background: rgba(0, 173, 209, 0.2);
+  box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
+  gap: 20px;
+  flex-direction: column;
+  padding: 20px;
+  overflow: scroll;
+  border-radius: 8px;
+`;
+const Project = styled.li`
+  display: flex;
+  align-items: center;
+  gap: 20px;
+`;
+
+const ProjectLogo = styled.img`
+  border-radius: 50%;
+`;
+const ProjectDetails = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+`;
+const ProjectName = styled.p`
+  color: #fff;
+  font-family: Dosis;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 600;
+  line-height: normal;
+`;
+const ProjectAddress = styled.p`
+  color: #fff;
+  font-family: Dosis;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
+const Del = styled.img`
+  cursor: pointer;
+  &:hover {
+    transform: scale(1.05);
+  }
+`;
 const ProfilePage = () => {
   const { account } = useAccount();
   const [profileIsActive, setProfileIsActive] = useState(true);
@@ -121,6 +220,51 @@ const ProfilePage = () => {
       : setProfileIsActive(false);
   };
 
+  const includes = [
+    {
+      logo: ethereum,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'Ethereum',
+    },
+    {
+      logo: monero,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'Monero',
+    },
+    {
+      logo: dot,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'Pokadot',
+    },
+    {
+      logo: zcash,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'ZCash',
+    },
+    {
+      logo: luna,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'Luna',
+    },
+    {
+      logo: tcash,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'Tornado Cash',
+    },
+    {
+      logo: tia,
+      address:
+        '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
+      name: 'Celestia',
+    },
+  ];
+
   return (
     <Container>
       <Tabs>
@@ -131,33 +275,76 @@ const ProfilePage = () => {
           <Text>Ecosystem</Text>
         </Tab>
       </Tabs>
-      <Content>
-        <Logo>
-          <Label>Logo</Label>
-          <CircleImageUploader />
-        </Logo>
-        <FieldsAndButton>
-          <Fields>
+      {profileIsActive ? (
+        <Content>
+          <Logo>
+            <Label>Logo</Label>
+            <CircleImageUploader />
+          </Logo>
+          <FieldsAndButton>
+            <Fields>
+              <Field>
+                <Label>Address</Label>
+                <Input value={account} disabled />
+              </Field>
+              <Field>
+                <Label>Name</Label>
+                <Input />
+              </Field>
+              <Field>
+                <Label>Token</Label>
+                <Input />
+              </Field>
+              <Field>
+                <Label>Description</Label>
+                <Input />
+              </Field>
+            </Fields>
+            <Button>Save</Button>
+          </FieldsAndButton>
+        </Content>
+      ) : (
+        <EcoContent>
+          <FieldAndButton>
             <Field>
-              <Label>Address</Label>
-              <Input value={account} disabled />
-            </Field>
-            <Field>
-              <Label>Name</Label>
+              <Label>Add the project address to ecosystem</Label>
               <Input />
             </Field>
-            <Field>
-              <Label>Token</Label>
-              <Input />
-            </Field>
-            <Field>
-              <Label>Description</Label>
-              <Input />
-            </Field>
-          </Fields>
-          <Button>Save</Button>
-        </FieldsAndButton>
-      </Content>
+            <Add src={add} />
+          </FieldAndButton>
+          <Cols>
+            <Col>
+              <ColHead>Includes:</ColHead>
+              <ColBody>
+                {includes.map((project) => (
+                  <Project>
+                    <ProjectLogo width='65px' src={project.logo} />
+                    <ProjectDetails>
+                      <ProjectName>{project.name}</ProjectName>
+                      <ProjectAddress>{project.address}</ProjectAddress>
+                    </ProjectDetails>
+                    <Del src={del} width='46px' />
+                  </Project>
+                ))}
+              </ColBody>
+            </Col>
+            <Col>
+              <ColHead>Is included in:</ColHead>
+              <ColBody>
+                {includes.map((project) => (
+                  <Project>
+                    <ProjectLogo width='65px' src={project.logo} />
+                    <ProjectDetails>
+                      <ProjectName>{project.name}</ProjectName>
+                      <ProjectAddress>{project.address}</ProjectAddress>
+                    </ProjectDetails>
+                  </Project>
+                ))}
+              </ColBody>{' '}
+            </Col>
+          </Cols>
+        </EcoContent>
+      )}
     </Container>
   );
 };
