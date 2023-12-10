@@ -57,6 +57,9 @@ const NavBar = ({ account }) => {
         <Text>
           <A to='/ecosystem'>ECOSYSTEM</A>
         </Text>
+        <Text>
+          <A to='/global'>GLOBAL</A>
+        </Text>
         {account ? (
           <Address>
             {account.slice(0, 5)}...{account.slice(-5)}
