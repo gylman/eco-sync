@@ -1,0 +1,36 @@
+specVersion: 0.0.5
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Contract
+    network: mumbai
+    source:
+      address: "0x155bC4207709A0A7BFbDDD47C260B3f40aFD464c"
+      abi: Contract
+      startBlock: 43357067
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.7
+      language: wasm/assemblyscript
+      entities:
+        - CompanyAdded
+        - EcosystemUpdated
+        - Exclude
+        - Include
+        - IncludeeStatusUpdate
+      abis:
+        - name: Contract
+          file: ./abis/Contract.json
+      eventHandlers:
+        - event: CompanyAdded(indexed address,string)
+          handler: handleCompanyAdded
+        - event: EcosystemUpdated(indexed address,indexed address,bool)
+          handler: handleEcosystemUpdated
+        - event: Exclude(indexed address,indexed address)
+          handler: handleExclude
+        - event: Include(indexed address,indexed address)
+          handler: handleInclude
+        - event: IncludeeStatusUpdate(indexed address,indexed address,indexed address,bool)
+          handler: handleIncludeeStatusUpdate
+      file: ./src/contract.ts
