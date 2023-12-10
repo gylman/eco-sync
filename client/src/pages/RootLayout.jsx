@@ -43,7 +43,7 @@ const SubTitle = styled.p`
   line-height: normal;
 `;
 
-const Button = styled.button`
+export const Button = styled.button`
   border-radius: 18px;
   border: 2px solid #fff;
   background: linear-gradient(269deg, #00add1 0%, rgba(76, 65, 209, 0.8) 100%);
