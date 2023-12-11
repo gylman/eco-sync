@@ -21,8 +21,10 @@ const HiddenInput = styled.input`
   display: none;
 `;
 
-const CircleImageUploader = ({ image = null, setImage }) => {
+const CircleImageUploader = ({ image = null, setImage, disabled }) => {
   const handleImageChange = (e) => {
+    if (!disabled) return;
+
     const file = e.target.files[0];
     const reader = new FileReader();
 
@@ -41,6 +43,7 @@ const CircleImageUploader = ({ image = null, setImage }) => {
   return (
     <div>
       <HiddenInput
+        disabled={disabled}
         type='file'
         id='image-upload'
         onChange={handleImageChange}

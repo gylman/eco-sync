@@ -1,14 +1,8 @@
-import React from 'react';
 import styled from 'styled-components';
-import luna from '../assets/images/luna.png';
-import dot from '../assets/images/dot.png';
-import tcash from '../assets/images/tcash.png';
-import zcash from '../assets/images/zcash.png';
-import monero from '../assets/images/monero.png';
-import ethereum from '../assets/images/ethereum.png';
-import tia from '../assets/images/tia.svg';
 import cuid from 'cuid';
 import { useNavigate } from 'react-router';
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
 
 const Container = styled.div`
   width: 100%;
@@ -63,127 +57,25 @@ const ColCell = styled.p`
   align-items: center;
 `;
 
-const Logo = styled.img`
-  border-radius: 50%;
+const COMPANIES_QUERY = gql`
+  {
+    companies {
+      id
+      name
+      walletAddress
+      profilePhoto
+      includeCount
+      includedByCount
+    }
+  }
 `;
-
-const includes = [
-  {
-    logo: ethereum,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: monero,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: dot,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: zcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: luna,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: tcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: tia,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: ethereum,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: monero,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: dot,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: zcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: luna,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: tcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
-    numIn: 10,
-    numHas: 3,
-  },
-  {
-    logo: tia,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
-    numIn: 10,
-    numHas: 3,
-  },
-];
 
 const GlobalPage = () => {
   const navigate = useNavigate();
+  const { loading, error, data } = useQuery(COMPANIES_QUERY);
+
+  console.log("data", data);
+
   return (
     <Container>
       <Row>
@@ -192,14 +84,28 @@ const GlobalPage = () => {
         <ColHead>INCLUDES</ColHead>
         <ColHead>INCLUDED IN</ColHead>
       </Row>
-      {includes.map((project) => (
-        <Row onClick={() => navigate(`/project/${project.name}`)} key={cuid()}>
-          <ColCell>
-            <Logo src={project.logo} width='65px' />
-          </ColCell>
+      {data?.companies?.map((project) => (
+        <Row  onClick={() => navigate(`/project/${project.name}`)} key={project.id}>
           <ColCell>{project.name}</ColCell>
-          <ColCell>{project.numHas}</ColCell>
-          <ColCell>{project.numIn}</ColCell>
+          <ColCell>
+            <img
+              src={
+                project.profilePhoto
+                  ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                      project.profilePhoto
+                    }`
+                  : undefined
+              }
+              style={{
+                width: "65px",
+                height: "65px",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
+          </ColCell>
+          <ColCell>{project.includeCount}</ColCell>
+          <ColCell>{project.includedByCount}</ColCell>
         </Row>
       ))}
     </Container>

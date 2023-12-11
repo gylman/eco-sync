@@ -1,15 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import add from '../assets/images/add.svg';
 import del from '../assets/images/delete.svg';
-import luna from '../assets/images/luna.png';
-import dot from '../assets/images/dot.png';
-import tcash from '../assets/images/tcash.png';
-import zcash from '../assets/images/zcash.png';
-import monero from '../assets/images/monero.png';
-import ethereum from '../assets/images/ethereum.png';
-import tia from '../assets/images/tia.svg';
-import cuid from 'cuid';
 import { useAccount } from '../contexts/AccountContext';
 import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
@@ -96,6 +88,7 @@ const ColHead = styled.p`
 `;
 
 const ColBody = styled.ul`
+  min-width: 744px;
   display: flex;
   background: rgba(0, 173, 209, 0.2);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -143,95 +136,6 @@ const Del = styled.img`
     transform: scale(1.05);
   }
 `;
-
-const includes = [
-  {
-    logo: ethereum,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
-  },
-  {
-    logo: monero,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
-  },
-  {
-    logo: dot,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
-  },
-  {
-    logo: zcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
-  },
-  {
-    logo: luna,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
-  },
-  {
-    logo: tcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
-  },
-  {
-    logo: tia,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
-  },
-  {
-    logo: ethereum,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
-  },
-  {
-    logo: monero,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
-  },
-  {
-    logo: dot,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
-  },
-  {
-    logo: zcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
-  },
-  {
-    logo: luna,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
-  },
-  {
-    logo: tcash,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
-  },
-  {
-    logo: tia,
-    address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
-  },
-];
-
-
 const ECOS_QUERY = (address) => gql`
   {
     ecos(where: { and: [{ isIncluded: true }, { or: [{ company1Address: "${address}" }, { company2Address: "${address}" }] }] }) {
@@ -297,34 +201,44 @@ const EcoPage = () => {
         <Col>
           <ColHead>Includes:</ColHead>
           <ColBody>
-            {includes.map((project) => (
-              <Project key={cuid()}>
-                <ProjectLogo width='65px' src={project.logo} />
-                <ProjectDetails>
-                  <ProjectName>{project.name}</ProjectName>
-                  <ProjectAddress>{project.address}</ProjectAddress>
-                </ProjectDetails>
-                <Del
-                  src={del}
-                  width='46px'
-                  onClick={() => delFromEco(project.address)}
-                />
-              </Project>
-            ))}
+            {ecosQuery.data?.ecos.find(e => e.company1Address === account)?.map(({ company2Address }) => {
+              const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company2Address);
+              return (
+                <Project key={company2Address}>
+                  <ProjectLogo width='65px' src={project?.logo ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                    project.logo
+                  }` : undefined} />
+                  <ProjectDetails>
+                    <ProjectName>{project?.name ?? '???'}</ProjectName>
+                    <ProjectAddress>{company2Address}</ProjectAddress>
+                  </ProjectDetails>
+                  <Del
+                    src={del}
+                    width='46px'
+                    onClick={() => delFromEco(company2Address)}
+                  />
+                </Project>
+              )
+            })}
           </ColBody>
         </Col>
         <Col>
           <ColHead>Is included in:</ColHead>
           <ColBody>
-            {includes.map((project) => (
-              <Project key={cuid()}>
-                <ProjectLogo width='65px' src={project.logo} />
-                <ProjectDetails>
-                  <ProjectName>{project.name}</ProjectName>
-                  <ProjectAddress>{project.address}</ProjectAddress>
-                </ProjectDetails>
-              </Project>
-            ))}
+          {ecosQuery.data?.ecos.find(e => e.company2Address === account)?.map(({ company1Address }) => {
+              const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company1Address);
+              return (
+                <Project key={company1Address}>
+                  <ProjectLogo width='65px' src={project?.logo ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                    project.logo
+                  }` : undefined} />
+                  <ProjectDetails>
+                    <ProjectName>{project?.name ?? '???'}</ProjectName>
+                    <ProjectAddress>{company1Address}</ProjectAddress>
+                  </ProjectDetails>
+                </Project>
+              );
+            })}
           </ColBody>{' '}
         </Col>
       </Cols>
