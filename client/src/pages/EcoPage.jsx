@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import styled from 'styled-components';
 import add from '../assets/images/add.svg';
 import del from '../assets/images/delete.svg';
@@ -14,6 +14,8 @@ import { useAccount } from '../contexts/AccountContext';
 import { ethers } from 'ethers';
 import { Web3Provider } from '@ethersproject/providers';
 import { useLocation, useParams } from 'react-router';
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 
 export const Field = styled.div`
   display: flex;
@@ -229,9 +231,38 @@ const includes = [
   },
 ];
 
+
+const ECOS_QUERY = (address) => gql`
+  {
+    ecos(where: { and: [{ isIncluded: true }, { or: [{ company1Address: "${address}" }, { company2Address: "${address}" }] }] }) {
+      id
+      company1Address
+      company2Address
+      isIncluded
+    }
+  }
+`;
+
+const COMPANIES_QUERY = (addresses) => gql`
+  {
+    companies(where: { id_in: ${JSON.stringify(addresses)} }) { id name walletAddress profilePhoto tokenName description }
+  }
+`;
+
 const EcoPage = () => {
-  const { contractAddress, contractABI } = useAccount();
+  const { account, contractAddress, contractABI } = useAccount();
   const [addedToEco, setAddedToEco] = useState('');
+
+
+  const ecosQuery = useQuery(ECOS_QUERY(account));
+  const companiesQuery = useQuery(COMPANIES_QUERY(ecosQuery.data?.ecos.flatMap((eco) => [eco.company1Address, eco.company2Address])));
+
+  useEffect(() => {
+    console.log('ecosQuery',ecosQuery.data, ecosQuery.error, account)
+  },[ecosQuery.data, ecosQuery.error, account])
+  useEffect(() => {
+    console.log('companiesQuery',companiesQuery.data)
+  },[companiesQuery.data])
 
   const handleAddToEcoInput = (e) => {
     setAddedToEco(e.target.value);
