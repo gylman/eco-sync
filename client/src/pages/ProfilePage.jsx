@@ -160,7 +160,7 @@ const ProfilePage = () => {
     <Content>
       <Logo>
         <Label>Logo</Label>
-        <CircleImageUploader image={logo} setImage={setLogo} />
+        <CircleImageUploader image={logo} setImage={setLogo} disabled={!!logo?.src && !logo?.file} />
       </Logo>
       <FieldsAndButton>
         <Fields>

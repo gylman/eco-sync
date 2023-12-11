@@ -96,6 +96,7 @@ const ColHead = styled.p`
 `;
 
 const ColBody = styled.ul`
+  min-width: 744px;
   display: flex;
   background: rgba(0, 173, 209, 0.2);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -297,34 +298,44 @@ const EcoPage = () => {
         <Col>
           <ColHead>Includes:</ColHead>
           <ColBody>
-            {includes.map((project) => (
-              <Project key={cuid()}>
-                <ProjectLogo width='65px' src={project.logo} />
-                <ProjectDetails>
-                  <ProjectName>{project.name}</ProjectName>
-                  <ProjectAddress>{project.address}</ProjectAddress>
-                </ProjectDetails>
-                <Del
-                  src={del}
-                  width='46px'
-                  onClick={() => delFromEco(project.address)}
-                />
-              </Project>
-            ))}
+            {ecosQuery.data?.ecos.find(e => e.company1Address === account)?.map(({ company2Address }) => {
+              const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company2Address);
+              return (
+                <Project key={company2Address}>
+                  <ProjectLogo width='65px' src={project?.logo ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                    project.logo
+                  }` : undefined} />
+                  <ProjectDetails>
+                    <ProjectName>{project?.name ?? '???'}</ProjectName>
+                    <ProjectAddress>{company2Address}</ProjectAddress>
+                  </ProjectDetails>
+                  <Del
+                    src={del}
+                    width='46px'
+                    onClick={() => delFromEco(company2Address)}
+                  />
+                </Project>
+              )
+            })}
           </ColBody>
         </Col>
         <Col>
           <ColHead>Is included in:</ColHead>
           <ColBody>
-            {includes.map((project) => (
-              <Project key={cuid()}>
-                <ProjectLogo width='65px' src={project.logo} />
-                <ProjectDetails>
-                  <ProjectName>{project.name}</ProjectName>
-                  <ProjectAddress>{project.address}</ProjectAddress>
-                </ProjectDetails>
-              </Project>
-            ))}
+          {ecosQuery.data?.ecos.find(e => e.company2Address === account)?.map(({ company1Address }) => {
+              const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company1Address);
+              return (
+                <Project key={company1Address}>
+                  <ProjectLogo width='65px' src={project?.logo ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                    project.logo
+                  }` : undefined} />
+                  <ProjectDetails>
+                    <ProjectName>{project?.name ?? '???'}</ProjectName>
+                    <ProjectAddress>{company1Address}</ProjectAddress>
+                  </ProjectDetails>
+                </Project>
+              )
+            })}
           </ColBody>{' '}
         </Col>
       </Cols>

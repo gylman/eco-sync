@@ -1,13 +1,15 @@
-import React from 'react';
-import styled from 'styled-components';
-import luna from '../assets/images/luna.png';
-import dot from '../assets/images/dot.png';
-import tcash from '../assets/images/tcash.png';
-import zcash from '../assets/images/zcash.png';
-import monero from '../assets/images/monero.png';
-import ethereum from '../assets/images/ethereum.png';
-import tia from '../assets/images/tia.svg';
-import cuid from 'cuid';
+import React from "react";
+import styled from "styled-components";
+import luna from "../assets/images/luna.png";
+import dot from "../assets/images/dot.png";
+import tcash from "../assets/images/tcash.png";
+import zcash from "../assets/images/zcash.png";
+import monero from "../assets/images/monero.png";
+import ethereum from "../assets/images/ethereum.png";
+import tia from "../assets/images/tia.svg";
+import cuid from "cuid";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
 
 const Container = styled.div`
   width: 100%;
@@ -56,118 +58,135 @@ const includes = [
   {
     logo: ethereum,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Ethereum",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: monero,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Monero",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: dot,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Pokadot",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: zcash,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "ZCash",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: luna,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Luna",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: tcash,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Tornado Cash",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: tia,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Celestia",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: ethereum,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Ethereum',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Ethereum",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: monero,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Monero',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Monero",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: dot,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Pokadot',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Pokadot",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: zcash,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'ZCash',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "ZCash",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: luna,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Luna',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Luna",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: tcash,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Tornado Cash',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Tornado Cash",
     numIn: 10,
     numHas: 3,
   },
   {
     logo: tia,
     address:
-      '0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6',
-    name: 'Celestia',
+      "0xa9a4bda4d31b2189c8403467894d924355289ccd3ad8e2cd1fe4ba53b37408c6",
+    name: "Celestia",
     numIn: 10,
     numHas: 3,
   },
 ];
 
+const COMPANIES_QUERY = gql`
+  {
+    companies {
+      id
+      name
+      walletAddress
+      profilePhoto
+      includeCount
+      includedByCount
+    }
+  }
+`;
+
 const GlobalPage = () => {
+  const { loading, error, data } = useQuery(COMPANIES_QUERY);
+
+  console.log("data", data);
+
   return (
     <Container>
       <Row>
@@ -176,14 +195,28 @@ const GlobalPage = () => {
         <ColHead>Includes</ColHead>
         <ColHead>Included in</ColHead>
       </Row>
-      {includes.map((project) => (
+      {data?.companies?.map((project) => (
         <Row key={cuid()}>
           <ColCell>{project.name}</ColCell>
           <ColCell>
-            <img src={project.logo} width='65px' />
+            <img
+              src={
+                project.profilePhoto
+                  ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                      project.profilePhoto
+                    }`
+                  : undefined
+              }
+              style={{
+                width: "65px",
+                height: "65px",
+                objectFit: "cover",
+                objectPosition: "center",
+              }}
+            />
           </ColCell>
-          <ColCell>{project.numHas}</ColCell>
-          <ColCell>{project.numIn}</ColCell>
+          <ColCell>{project.includeCount}</ColCell>
+          <ColCell>{project.includedByCount}</ColCell>
         </Row>
       ))}
     </Container>
