@@ -8,6 +8,7 @@ import monero from '../assets/images/monero.png';
 import ethereum from '../assets/images/ethereum.png';
 import tia from '../assets/images/tia.svg';
 import cuid from 'cuid';
+import { useNavigate } from 'react-router';
 
 const Container = styled.div`
   width: 100%;
@@ -23,6 +24,10 @@ const Container = styled.div`
 const Row = styled.div`
   display: flex;
   border-radius: 10px;
+  cursor: pointer;
+  &:hover {
+    cursor: pointer;
+  }
   &:nth-child(odd) {
     background: #020538;
   }
@@ -177,20 +182,21 @@ const includes = [
 ];
 
 const GlobalPage = () => {
+  const navigate = useNavigate();
   return (
     <Container>
       <Row>
-        <ColHead>PROJECT</ColHead>
         <ColHead>LOGO</ColHead>
+        <ColHead>PROJECT</ColHead>
         <ColHead>INCLUDES</ColHead>
         <ColHead>INCLUDED IN</ColHead>
       </Row>
       {includes.map((project) => (
-        <Row key={cuid()}>
-          <ColCell>{project.name}</ColCell>
+        <Row onClick={() => navigate(`/project/${project.name}`)} key={cuid()}>
           <ColCell>
             <Logo src={project.logo} width='65px' />
           </ColCell>
+          <ColCell>{project.name}</ColCell>
           <ColCell>{project.numHas}</ColCell>
           <ColCell>{project.numIn}</ColCell>
         </Row>
