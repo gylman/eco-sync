@@ -6,8 +6,8 @@ contract CompanyRegistry {
         string name;
         address walletAddress;
         string profilePhoto;
-        bool hasToken;
         string tokenName;
+        string description;
     }
 
     struct Eco {
@@ -21,17 +21,14 @@ contract CompanyRegistry {
     address[] public companyAddresses;
 
     // Events
-    event CompanyAdded(address indexed walletAddress, string name);
+    event CompanyAdded(address indexed walletAddress, string name, string profilePhoto, string tokenName, string description);
     event EcosystemUpdated(address indexed company1, address indexed company2, bool isPartnership);
-    event Include(address indexed includer, address indexed includee);
-    event Exclude(address indexed includer, address indexed includee);
-    event IncludeeStatusUpdate(address indexed observer, address indexed includedCompany, address indexed otherParty, bool included);
 
     function addCompany(
         string memory _name,
         string memory _profilePhoto,
-        bool _hasToken,
-        string memory _tokenName
+        string memory _tokenName,
+        string memory _description
     ) external {
         require(bytes(_name).length > 0, "Name cannot be empty");
         require(companies[msg.sender].walletAddress == address(0), "You already have a company");
@@ -40,11 +37,11 @@ contract CompanyRegistry {
         newCompany.name = _name;
         newCompany.walletAddress = msg.sender;
         newCompany.profilePhoto = _profilePhoto;
-        newCompany.hasToken = _hasToken;
         newCompany.tokenName = _tokenName;
+        newCompany.description = _description;
 
         companyAddresses.push(msg.sender);
-        emit CompanyAdded(msg.sender, _name);
+        emit CompanyAdded(msg.sender, _name, _profilePhoto, _tokenName, _description);
     }
 
     function updateEcosystem(address _company2, bool  _includesInEco) external {
@@ -54,31 +51,17 @@ contract CompanyRegistry {
 
         Eco storage record = ecoMapping[msg.sender][_company2];
 
-        if ( _includesInEco) {
+        if (_includesInEco) {
             require(!record.includesInEco, "Already added to Ecosystem");
             record.includesInEco = true;
             record.createdTimestamp = block.timestamp;
-            emit Include(msg.sender, _company2);
-            // Notify observers that trust a company
-            notifyObservers(msg.sender, _company2, true);
         } else {
             require(record.includesInEco, "Company is not in your ecosystem");
             record.includesInEco = false;
             record.removedTimestamp = block.timestamp;
-            emit Exclude(msg.sender, _company2);
-            // Notify observers that trust a company
-            notifyObservers(msg.sender, _company2, false);
         }
 
         emit EcosystemUpdated(msg.sender, _company2,  _includesInEco);
-    }
-
-    function notifyObservers(address _includer, address _includee, bool _included) internal {
-        for (uint i = 0; i < companyAddresses.length; i++) {
-            if (ecoMapping[companyAddresses[i]][_includee].includesInEco) {
-                emit IncludeeStatusUpdate(companyAddresses[i], _includee, _includer, _included);
-            }
-        }
     }
 
     function totalCompanies() external view returns (uint) {

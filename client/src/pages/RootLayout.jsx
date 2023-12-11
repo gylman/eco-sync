@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router';
+import { Outlet, useNavigate } from 'react-router';
 import NavBar from '../components/NavBar';
 import styled from 'styled-components';
 import map from '../assets/images/map.svg';
@@ -63,10 +63,15 @@ export const Button = styled.button`
     cursor: pointer;
     transform: scale(1.01);
   }
+  &:disabled {
+    pointer-events: none;
+    opacity: 0.5;
+  }
 `;
 
 const RootLayout = () => {
   const { account, connectWallet } = useAccount();
+  const navigate = useNavigate();
 
   return (
     <Background>
@@ -77,7 +82,12 @@ const RootLayout = () => {
         <Body>
           <Title>ECO SYNC</Title>
           <SubTitle>Sync your ecosystem with the world</SubTitle>
-          <Button onClick={connectWallet}>Connect Wallet</Button>
+          <Button onClick={async () => {
+            const account = await connectWallet();
+            if (account) {
+              navigate(`/profile/${account}`);
+            }
+          }}>Connect Wallet</Button>
         </Body>
       )}
     </Background>
