@@ -1,8 +1,8 @@
 import styled from 'styled-components';
 import cuid from 'cuid';
 import { useNavigate } from 'react-router';
-import gql from "graphql-tag";
-import { useQuery } from "@apollo/react-hooks";
+import gql from 'graphql-tag';
+import { useQuery } from '@apollo/react-hooks';
 
 const Container = styled.div`
   width: 100%;
@@ -77,7 +77,7 @@ const GlobalPage = () => {
   const navigate = useNavigate();
   const { loading, error, data } = useQuery(COMPANIES_QUERY);
 
-  console.log("data", data);
+  console.log('data', data);
 
   return (
     <Container>
@@ -88,7 +88,10 @@ const GlobalPage = () => {
         <ColHead>INCLUDED IN</ColHead>
       </Row>
       {data?.companies?.map((project) => (
-        <Row  onClick={() => navigate(`/project/${project.name}`)} key={project.id}>
+        <Row
+          onClick={() => navigate(`/project/${project.name}`)}
+          key={project.id}
+        >
           <ColCell>{project.name}</ColCell>
           <ColCell>
             <img
@@ -100,10 +103,11 @@ const GlobalPage = () => {
                   : undefined
               }
               style={{
-                width: "65px",
-                height: "65px",
-                objectFit: "cover",
-                objectPosition: "center",
+                width: '65px',
+                height: '65px',
+                objectFit: 'cover',
+                objectPosition: 'center',
+                borderRadius: '50%',
               }}
             />
           </ColCell>
