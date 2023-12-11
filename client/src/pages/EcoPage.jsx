@@ -237,6 +237,14 @@ const EcoPage = () => {
     setAddedToEco(e.target.value);
   };
 
+  const delFromEco = async (address) => {
+    const provider = new Web3Provider(window.ethereum);
+    await provider.send('eth_requestAccounts', []);
+    const signer = provider.getSigner();
+    const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    const tx = await contract.updateEcosystem(address, false);
+  };
+
   const addToEco = async () => {
     const provider = new Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
@@ -265,7 +273,11 @@ const EcoPage = () => {
                   <ProjectName>{project.name}</ProjectName>
                   <ProjectAddress>{project.address}</ProjectAddress>
                 </ProjectDetails>
-                <Del src={del} width='46px' />
+                <Del
+                  src={del}
+                  width='46px'
+                  onClick={() => delFromEco(project.address)}
+                />
               </Project>
             ))}
           </ColBody>
