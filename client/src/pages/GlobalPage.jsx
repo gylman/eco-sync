@@ -88,8 +88,8 @@ const GlobalPage = () => {
       {loading && <Loader />}
 
       <Row>
-        <ColHead>LOGO</ColHead>
         <ColHead>PROJECT</ColHead>
+        <ColHead>LOGO</ColHead>
         <ColHead>INCLUDES</ColHead>
         <ColHead>INCLUDED IN</ColHead>
       </Row>
