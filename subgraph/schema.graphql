@@ -1,6 +1,17 @@
-type ExampleEntity @entity {
-  id: Bytes!
-  count: BigInt!
-  walletAddress: Bytes! # address
-  name: String! # string
+type Company @entity {
+  id: ID!
+  walletAddress: Bytes!
+  name: String!
+  profilePhoto: String
+  tokenName: String
+  description: String
+  includeCount: Int!
+  includedByCount: Int!
+}
+
+type Eco @entity {
+  id: ID!
+  company1Address: Bytes!
+  company2Address: Bytes!
+  isIncluded: Boolean!
 }

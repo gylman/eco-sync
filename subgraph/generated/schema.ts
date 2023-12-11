@@ -50,23 +50,6 @@ export class Company extends Entity {
     this.set("id", Value.fromString(value));
   }
 
-  get name(): string | null {
-    let value = this.get("name");
-    if (!value || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set name(value: string | null) {
-    if (!value) {
-      this.unset("name");
-    } else {
-      this.set("name", Value.fromString(<string>value));
-    }
-  }
-
   get walletAddress(): Bytes {
     let value = this.get("walletAddress");
     if (!value || value.kind == ValueKind.NULL) {
@@ -78,6 +61,19 @@ export class Company extends Entity {
 
   set walletAddress(value: Bytes) {
     this.set("walletAddress", Value.fromBytes(value));
+  }
+
+  get name(): string {
+    let value = this.get("name");
+    if (!value || value.kind == ValueKind.NULL) {
+      throw new Error("Cannot return null for a required field.");
+    } else {
+      return value.toString();
+    }
+  }
+
+  set name(value: string) {
+    this.set("name", Value.fromString(value));
   }
 
   get profilePhoto(): string | null {
@@ -97,19 +93,6 @@ export class Company extends Entity {
     }
   }
 
-  get hasToken(): boolean {
-    let value = this.get("hasToken");
-    if (!value || value.kind == ValueKind.NULL) {
-      return false;
-    } else {
-      return value.toBoolean();
-    }
-  }
-
-  set hasToken(value: boolean) {
-    this.set("hasToken", Value.fromBoolean(value));
-  }
-
   get tokenName(): string | null {
     let value = this.get("tokenName");
     if (!value || value.kind == ValueKind.NULL) {
@@ -125,6 +108,49 @@ export class Company extends Entity {
     } else {
       this.set("tokenName", Value.fromString(<string>value));
     }
+  }
+
+  get description(): string | null {
+    let value = this.get("description");
+    if (!value || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
+  }
+
+  set description(value: string | null) {
+    if (!value) {
+      this.unset("description");
+    } else {
+      this.set("description", Value.fromString(<string>value));
+    }
+  }
+
+  get includeCount(): i32 {
+    let value = this.get("includeCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set includeCount(value: i32) {
+    this.set("includeCount", Value.fromI32(value));
+  }
+
+  get includedByCount(): i32 {
+    let value = this.get("includedByCount");
+    if (!value || value.kind == ValueKind.NULL) {
+      return 0;
+    } else {
+      return value.toI32();
+    }
+  }
+
+  set includedByCount(value: i32) {
+    this.set("includedByCount", Value.fromI32(value));
   }
 }
 

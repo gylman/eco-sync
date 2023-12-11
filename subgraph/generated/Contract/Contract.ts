@@ -30,6 +30,18 @@ export class CompanyAdded__Params {
   get name(): string {
     return this._event.parameters[1].value.toString();
   }
+
+  get profilePhoto(): string {
+    return this._event.parameters[2].value.toString();
+  }
+
+  get tokenName(): string {
+    return this._event.parameters[3].value.toString();
+  }
+
+  get description(): string {
+    return this._event.parameters[4].value.toString();
+  }
 }
 
 export class EcosystemUpdated extends ethereum.Event {
@@ -58,92 +70,18 @@ export class EcosystemUpdated__Params {
   }
 }
 
-export class Exclude extends ethereum.Event {
-  get params(): Exclude__Params {
-    return new Exclude__Params(this);
-  }
-}
-
-export class Exclude__Params {
-  _event: Exclude;
-
-  constructor(event: Exclude) {
-    this._event = event;
-  }
-
-  get includer(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get includee(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class Include extends ethereum.Event {
-  get params(): Include__Params {
-    return new Include__Params(this);
-  }
-}
-
-export class Include__Params {
-  _event: Include;
-
-  constructor(event: Include) {
-    this._event = event;
-  }
-
-  get includer(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get includee(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-}
-
-export class IncludeeStatusUpdate extends ethereum.Event {
-  get params(): IncludeeStatusUpdate__Params {
-    return new IncludeeStatusUpdate__Params(this);
-  }
-}
-
-export class IncludeeStatusUpdate__Params {
-  _event: IncludeeStatusUpdate;
-
-  constructor(event: IncludeeStatusUpdate) {
-    this._event = event;
-  }
-
-  get observer(): Address {
-    return this._event.parameters[0].value.toAddress();
-  }
-
-  get includedCompany(): Address {
-    return this._event.parameters[1].value.toAddress();
-  }
-
-  get otherParty(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get included(): boolean {
-    return this._event.parameters[3].value.toBoolean();
-  }
-}
-
 export class Contract__companiesResult {
   value0: string;
   value1: Address;
   value2: string;
-  value3: boolean;
+  value3: string;
   value4: string;
 
   constructor(
     value0: string,
     value1: Address,
     value2: string,
-    value3: boolean,
+    value3: string,
     value4: string
   ) {
     this.value0 = value0;
@@ -158,7 +96,7 @@ export class Contract__companiesResult {
     map.set("value0", ethereum.Value.fromString(this.value0));
     map.set("value1", ethereum.Value.fromAddress(this.value1));
     map.set("value2", ethereum.Value.fromString(this.value2));
-    map.set("value3", ethereum.Value.fromBoolean(this.value3));
+    map.set("value3", ethereum.Value.fromString(this.value3));
     map.set("value4", ethereum.Value.fromString(this.value4));
     return map;
   }
@@ -175,11 +113,11 @@ export class Contract__companiesResult {
     return this.value2;
   }
 
-  getHasToken(): boolean {
+  getTokenName(): string {
     return this.value3;
   }
 
-  getTokenName(): string {
+  getDescription(): string {
     return this.value4;
   }
 }
@@ -256,7 +194,7 @@ export class Contract extends ethereum.SmartContract {
   companies(param0: Address): Contract__companiesResult {
     let result = super.call(
       "companies",
-      "companies(address):(string,address,string,bool,string)",
+      "companies(address):(string,address,string,string,string)",
       [ethereum.Value.fromAddress(param0)]
     );
 
@@ -264,7 +202,7 @@ export class Contract extends ethereum.SmartContract {
       result[0].toString(),
       result[1].toAddress(),
       result[2].toString(),
-      result[3].toBoolean(),
+      result[3].toString(),
       result[4].toString()
     );
   }
@@ -274,7 +212,7 @@ export class Contract extends ethereum.SmartContract {
   ): ethereum.CallResult<Contract__companiesResult> {
     let result = super.tryCall(
       "companies",
-      "companies(address):(string,address,string,bool,string)",
+      "companies(address):(string,address,string,string,string)",
       [ethereum.Value.fromAddress(param0)]
     );
     if (result.reverted) {
@@ -286,7 +224,7 @@ export class Contract extends ethereum.SmartContract {
         value[0].toString(),
         value[1].toAddress(),
         value[2].toString(),
-        value[3].toBoolean(),
+        value[3].toString(),
         value[4].toString()
       )
     );
@@ -464,11 +402,11 @@ export class AddCompanyCall__Inputs {
     return this._call.inputValues[1].value.toString();
   }
 
-  get _hasToken(): boolean {
-    return this._call.inputValues[2].value.toBoolean();
+  get _tokenName(): string {
+    return this._call.inputValues[2].value.toString();
   }
 
-  get _tokenName(): string {
+  get _description(): string {
     return this._call.inputValues[3].value.toString();
   }
 }

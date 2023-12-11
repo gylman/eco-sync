@@ -1,65 +1,74 @@
-import { BigInt } from "@graphprotocol/graph-ts"
-import {
-  Contract,
-  CompanyAdded,
-  EcosystemUpdated,
-  Exclude,
-  Include,
-  IncludeeStatusUpdate
-} from "../generated/Contract/Contract"
-import { ExampleEntity } from "../generated/schema"
+import { ByteArray, crypto } from "@graphprotocol/graph-ts";
+import { CompanyAdded, EcosystemUpdated } from "../generated/Contract/Contract";
+import { Company, Eco } from "../generated/schema";
 
 export function handleCompanyAdded(event: CompanyAdded): void {
   // Entities can be loaded from the store using a string ID; this ID
   // needs to be unique across all entities of the same type
-  let entity = ExampleEntity.load(event.transaction.from)
+  let company = Company.load(event.transaction.from.toHexString());
 
   // Entities only exist after they have been saved to the store;
   // `null` checks allow to create entities on demand
-  if (!entity) {
-    entity = new ExampleEntity(event.transaction.from)
-
-    // Entity fields can be set using simple assignments
-    entity.count = BigInt.fromI32(0)
+  if (!company) {
+    company = new Company(event.transaction.from.toHexString());
   }
 
-  // BigInt and BigDecimal math are supported
-  entity.count = entity.count + BigInt.fromI32(1)
+  company.name = event.params.name;
+  company.walletAddress = event.params.walletAddress;
+  company.profilePhoto = event.params.profilePhoto;
+  company.tokenName = event.params.tokenName;
+  company.description = event.params.description;
+  company.includeCount = 0;
+  company.includedByCount = 0;
 
-  // Entity fields can be set based on event parameters
-  entity.walletAddress = event.params.walletAddress
-  entity.name = event.params.name
-
-  // Entities can be written to the store with `.save()`
-  entity.save()
-
-  // Note: If a handler doesn't require existing field values, it is faster
-  // _not_ to load the entity from the store. Instead, create it fresh with
-  // `new Entity(...)`, set the fields that should be updated and save the
-  // entity back to the store. Fields that were not set or unset remain
-  // unchanged, allowing for partial updates to be applied.
-
-  // It is also possible to access smart contracts from mappings. For
-  // example, the contract that has emitted the event can be connected to
-  // with:
-  //
-  // let contract = Contract.bind(event.address)
-  //
-  // The following functions can then be called on this contract to access
-  // state variables and other data:
-  //
-  // - contract.companies(...)
-  // - contract.companyAddressAtIndex(...)
-  // - contract.companyAddresses(...)
-  // - contract.ecoMapping(...)
-  // - contract.getInclusionInfo(...)
-  // - contract.totalCompanies(...)
+  company.save();
 }
 
-export function handleEcosystemUpdated(event: EcosystemUpdated): void {}
+export function handleEcosystemUpdated(event: EcosystemUpdated): void {
+  let id = crypto
+    .keccak256(
+      ByteArray.fromHexString(event.params.company1.toHexString()).concat(
+        ByteArray.fromHexString(event.params.company2.toHexString())
+      )
+    )
+    .toHexString();
+  let eco = Eco.load(id);
 
-export function handleExclude(event: Exclude): void {}
+  if (!eco) {
+    eco = new Eco(id);
+  }
 
-export function handleInclude(event: Include): void {}
+  eco.company1Address = event.params.company1;
+  eco.company2Address = event.params.company2;
+  eco.isIncluded = event.params.isPartnership;
 
-export function handleIncludeeStatusUpdate(event: IncludeeStatusUpdate): void {}
+  if (event.params.isPartnership) {
+    let company1 = Company.load(event.params.company1.toHexString());
+    let company2 = Company.load(event.params.company2.toHexString());
+
+    if (company1) {
+      company1.includeCount = company1.includeCount + 1;
+      company1.save();
+    }
+
+    if (company2) {
+      company2.includedByCount = company2.includedByCount + 1;
+      company2.save();
+    }
+  } else {
+    let company1 = Company.load(event.params.company1.toHexString());
+    let company2 = Company.load(event.params.company2.toHexString());
+
+    if (company1) {
+      company1.includeCount = company1.includeCount - 1;
+      company1.save();
+    }
+
+    if (company2) {
+      company2.includedByCount = company2.includedByCount - 1;
+      company2.save();
+    }
+  }
+
+  eco.save();
+}

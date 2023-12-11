@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router';
+import { Outlet } from 'react-router';
 import NavBar from '../components/NavBar';
 import styled from 'styled-components';
 import map from '../assets/images/map.svg';
@@ -71,8 +71,6 @@ export const Button = styled.button`
 
 const RootLayout = () => {
   const { account, connectWallet } = useAccount();
-  const navigate = useNavigate();
-
   return (
     <Background>
       <NavBar account={account} />
@@ -82,14 +80,7 @@ const RootLayout = () => {
         <Body>
           <Title>ECO SYNC</Title>
           <SubTitle>Sync your ecosystem with the world</SubTitle>
-          <Button
-            onClick={async () => {
-              const account = await connectWallet();
-              if (account) {
-                navigate(`/project/${account}`);
-              }
-            }}
-          >
+          <Button onClick={connectWallet}>
             Connect Wallet
           </Button>
         </Body>

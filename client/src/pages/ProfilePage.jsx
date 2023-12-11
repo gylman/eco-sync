@@ -91,10 +91,6 @@ const ProfilePage = () => {
   const { account, contractAddress, contractABI } = useAccount();
   const { loading, error, data } = useQuery(USERS_QUERY(account));
 
-  useEffect(() => {
-    console.log('data', data);
-  }, [data]);
-
   const [logo, setLogo] = useState(null);
   const [name, setName] = useState('');
   const [hasToken, setHasToken] = useState(false);
@@ -109,7 +105,6 @@ const ProfilePage = () => {
   };
   const handleDescription = (e) => {
     setDescription(e.target.value);
-    // console.log(logo, name, hasToken, token, description);
   };
 
   useEffect(() => {

@@ -6,31 +6,22 @@ dataSources:
     name: Contract
     network: mumbai
     source:
-      address: "0x155bC4207709A0A7BFbDDD47C260B3f40aFD464c"
+      address: "0x82527FE2d59f173692055606c138A81180c95e75"
       abi: Contract
-      startBlock: 43357067
+      startBlock: 43424254
     mapping:
       kind: ethereum/events
       apiVersion: 0.0.7
       language: wasm/assemblyscript
       entities:
-        - CompanyAdded
-        - EcosystemUpdated
-        - Exclude
-        - Include
-        - IncludeeStatusUpdate
+        - Company
+        - Eco
       abis:
         - name: Contract
           file: ./abis/Contract.json
       eventHandlers:
-        - event: CompanyAdded(indexed address,string)
+        - event: CompanyAdded(indexed address,string,string,string,string)
           handler: handleCompanyAdded
         - event: EcosystemUpdated(indexed address,indexed address,bool)
           handler: handleEcosystemUpdated
-        - event: Exclude(indexed address,indexed address)
-          handler: handleExclude
-        - event: Include(indexed address,indexed address)
-          handler: handleInclude
-        - event: IncludeeStatusUpdate(indexed address,indexed address,indexed address,bool)
-          handler: handleIncludeeStatusUpdate
       file: ./src/contract.ts
