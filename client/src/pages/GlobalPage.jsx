@@ -89,7 +89,7 @@ const GlobalPage = () => {
       </Row>
       {data?.companies?.map((project) => (
         <Row
-          onClick={() => navigate(`/project/${project.name}`)}
+          onClick={() => navigate(`/project/${project.id}`)}
           key={project.id}
         >
           <ColCell>{project.name}</ColCell>

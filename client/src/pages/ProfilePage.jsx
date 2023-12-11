@@ -107,7 +107,7 @@ const ProfilePage = () => {
 
   const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
-  const { loading, error, data } = useQuery(USERS_QUERY(account));
+  const { loading, error, data } = useQuery(USERS_QUERY(address));
 
   const [logo, setLogo] = useState(null);
   const [name, setName] = useState('');
@@ -144,6 +144,10 @@ const ProfilePage = () => {
   }, [hasToken, token]);
 
   const handleSave = async () => {
+    if (address !== account) {
+      return;
+    }
+
     const provider = new Web3Provider(window.ethereum);
     await provider.send('eth_requestAccounts', []);
     const signer = provider.getSigner();
@@ -153,8 +157,6 @@ const ProfilePage = () => {
       alert('Please upload a logo');
       return;
     }
-
-    console.log(account);
 
     const response = await uploadFile(
       `${account}.${/** @type {File} */ (logo.file).name.split('.').at(-1)}`,
@@ -215,7 +217,7 @@ const ProfilePage = () => {
             />
           </Field>
         </Fields>
-        {!data?.company && (
+        {account === address && !data?.company && (
           <Button disabled={!account || loading} onClick={handleSave}>
             Save
           </Button>

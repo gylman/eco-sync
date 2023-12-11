@@ -159,16 +159,17 @@ const COMPANIES_QUERY = (addresses) => gql`
 `;
 
 const EcoPage = () => {
+  const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
   const [addedToEco, setAddedToEco] = useState('');
 
 
-  const ecosQuery = useQuery(ECOS_QUERY(account));
+  const ecosQuery = useQuery(ECOS_QUERY(address));
   const companiesQuery = useQuery(COMPANIES_QUERY(ecosQuery.data?.ecos.flatMap((eco) => [eco.company1Address, eco.company2Address])));
 
   useEffect(() => {
-    console.log('ecosQuery',ecosQuery.data, ecosQuery.error, account)
-  },[ecosQuery.data, ecosQuery.error, account])
+    console.log('ecosQuery',ecosQuery.data, ecosQuery.error, address)
+  },[ecosQuery.data, ecosQuery.error, address])
   useEffect(() => {
     console.log('companiesQuery',companiesQuery.data)
   },[companiesQuery.data])
@@ -206,7 +207,7 @@ const EcoPage = () => {
         <Col>
           <ColHead>Includes:</ColHead>
           <ColBody>
-            {ecosQuery.data?.ecos.filter(e => e.company1Address === account)?.map(({ company2Address }) => {
+            {ecosQuery.data?.ecos.filter(e => e.company1Address === address)?.map(({ company2Address }) => {
               const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company2Address);
               return (
                 <Project key={company2Address}>
@@ -230,7 +231,7 @@ const EcoPage = () => {
         <Col>
           <ColHead>Is included in:</ColHead>
           <ColBody>
-          {ecosQuery.data?.ecos.filter(e => e.company2Address === account)?.map(({ company1Address }) => {
+          {ecosQuery.data?.ecos.filter(e => e.company2Address === address)?.map(({ company1Address }) => {
               const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company1Address);
               return (
                 <Project key={company1Address}>
