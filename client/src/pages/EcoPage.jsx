@@ -97,7 +97,7 @@ const ColBody = styled.ul`
   padding: 20px;
   overflow-y: scroll;
   border-radius: 8px;
-  height: 40%;
+  min-height: 256px;
 `;
 const Project = styled.li`
   display: flex;
@@ -107,6 +107,11 @@ const Project = styled.li`
 
 const ProjectLogo = styled.img`
   border-radius: 50%;
+  width: 65px;
+  height: 65px;
+  object-fit: cover;
+  object-position: center;
+  overflow: clip;
 `;
 const ProjectDetails = styled.div`
   display: flex;
@@ -201,12 +206,12 @@ const EcoPage = () => {
         <Col>
           <ColHead>Includes:</ColHead>
           <ColBody>
-            {ecosQuery.data?.ecos.find(e => e.company1Address === account)?.map(({ company2Address }) => {
+            {ecosQuery.data?.ecos.filter(e => e.company1Address === account)?.map(({ company2Address }) => {
               const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company2Address);
               return (
                 <Project key={company2Address}>
-                  <ProjectLogo width='65px' src={project?.logo ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
-                    project.logo
+                  <ProjectLogo src={project?.profilePhoto ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                    project.profilePhoto
                   }` : undefined} />
                   <ProjectDetails>
                     <ProjectName>{project?.name ?? '???'}</ProjectName>
@@ -225,12 +230,12 @@ const EcoPage = () => {
         <Col>
           <ColHead>Is included in:</ColHead>
           <ColBody>
-          {ecosQuery.data?.ecos.find(e => e.company2Address === account)?.map(({ company1Address }) => {
+          {ecosQuery.data?.ecos.filter(e => e.company2Address === account)?.map(({ company1Address }) => {
               const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company1Address);
               return (
                 <Project key={company1Address}>
-                  <ProjectLogo width='65px' src={project?.logo ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
-                    project.logo
+                  <ProjectLogo width='65px' src={project?.profilePhoto ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                    project.profilePhoto
                   }` : undefined} />
                   <ProjectDetails>
                     <ProjectName>{project?.name ?? '???'}</ProjectName>
