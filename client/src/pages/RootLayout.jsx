@@ -82,12 +82,16 @@ const RootLayout = () => {
         <Body>
           <Title>ECO SYNC</Title>
           <SubTitle>Sync your ecosystem with the world</SubTitle>
-          <Button onClick={async () => {
-            const account = await connectWallet();
-            if (account) {
-              navigate(`/profile/${account}`);
-            }
-          }}>Connect Wallet</Button>
+          <Button
+            onClick={async () => {
+              const account = await connectWallet();
+              if (account) {
+                navigate(`/project/${account}`);
+              }
+            }}
+          >
+            Connect Wallet
+          </Button>
         </Body>
       )}
     </Background>
