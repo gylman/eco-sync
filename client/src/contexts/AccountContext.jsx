@@ -10,7 +10,7 @@ export const AccountProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
   const { sdk, connected, connecting, provider, chainId } = useSDK();
 
-  const contractAddress = '0x82527FE2d59f173692055606c138A81180c95e75';
+  const contractAddress = '0xb265D7332993b57235f02F85Adb4CBb17Ad4d23E';
   const contractABI = [
     {
       anonymous: false,
