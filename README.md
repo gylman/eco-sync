@@ -13,5 +13,6 @@ Trusted projects can be found where reputation is important. Those who care abou
 
 1. `git clone https://github.com/gylman/eco-sync.git`
 2. `cd eco-sync`
-3. `npm i`
-4. `npm run dev`
+3. `cd client`
+4. `npm i`
+5. `npm run dev`
