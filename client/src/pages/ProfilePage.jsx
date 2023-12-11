@@ -135,11 +135,17 @@ const ProfilePage = () => {
     );
     // console.log('response', response);
 
-    const logoUrl = `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
-      response.IpfsHash
-    }`;
-    console.log(name, 'hello_world', hasToken, token);
-    const tx = await contract.addCompany(name, logoUrl, hasToken, token);
+    // const logoUrl = `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+    //   response.IpfsHash
+    // }`;
+
+    console.log(name, response.IpfsHash, token, description);
+    const tx = await contract.addCompany(
+      name,
+      response.IpfsHash,
+      token,
+      description
+    );
   };
 
   return (

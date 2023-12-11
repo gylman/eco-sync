@@ -10,36 +10,8 @@ export const AccountProvider = ({ children }) => {
   const [account, setAccount] = useState(null);
   const { sdk, connected, connecting, provider, chainId } = useSDK();
 
-  const contractAddress = '0x1FFa5e8B85B3dC1462ea5362190f9697Ba25c1Ca';
+  const contractAddress = '0x82527FE2d59f173692055606c138A81180c95e75';
   const contractABI = [
-    {
-      inputs: [
-        {
-          internalType: 'string',
-          name: '_name',
-          type: 'string',
-        },
-        {
-          internalType: 'string',
-          name: '_profilePhoto',
-          type: 'string',
-        },
-        {
-          internalType: 'bool',
-          name: '_hasToken',
-          type: 'bool',
-        },
-        {
-          internalType: 'string',
-          name: '_tokenName',
-          type: 'string',
-        },
-      ],
-      name: 'addCompany',
-      outputs: [],
-      stateMutability: 'nonpayable',
-      type: 'function',
-    },
     {
       anonymous: false,
       inputs: [
@@ -53,6 +25,24 @@ export const AccountProvider = ({ children }) => {
           indexed: false,
           internalType: 'string',
           name: 'name',
+          type: 'string',
+        },
+        {
+          indexed: false,
+          internalType: 'string',
+          name: 'profilePhoto',
+          type: 'string',
+        },
+        {
+          indexed: false,
+          internalType: 'string',
+          name: 'tokenName',
+          type: 'string',
+        },
+        {
+          indexed: false,
+          internalType: 'string',
+          name: 'description',
           type: 'string',
         },
       ],
@@ -85,88 +75,29 @@ export const AccountProvider = ({ children }) => {
       type: 'event',
     },
     {
-      anonymous: false,
       inputs: [
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'includer',
-          type: 'address',
+          internalType: 'string',
+          name: '_name',
+          type: 'string',
         },
         {
-          indexed: true,
-          internalType: 'address',
-          name: 'includee',
-          type: 'address',
+          internalType: 'string',
+          name: '_profilePhoto',
+          type: 'string',
+        },
+        {
+          internalType: 'string',
+          name: '_tokenName',
+          type: 'string',
+        },
+        {
+          internalType: 'string',
+          name: '_description',
+          type: 'string',
         },
       ],
-      name: 'Exclude',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'includer',
-          type: 'address',
-        },
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'includee',
-          type: 'address',
-        },
-      ],
-      name: 'Include',
-      type: 'event',
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'observer',
-          type: 'address',
-        },
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'includedCompany',
-          type: 'address',
-        },
-        {
-          indexed: true,
-          internalType: 'address',
-          name: 'otherParty',
-          type: 'address',
-        },
-        {
-          indexed: false,
-          internalType: 'bool',
-          name: 'included',
-          type: 'bool',
-        },
-      ],
-      name: 'IncludeeStatusUpdate',
-      type: 'event',
-    },
-    {
-      inputs: [
-        {
-          internalType: 'address',
-          name: '_company2',
-          type: 'address',
-        },
-        {
-          internalType: 'bool',
-          name: '_includesInEco',
-          type: 'bool',
-        },
-      ],
-      name: 'updateEcosystem',
+      name: 'addCompany',
       outputs: [],
       stateMutability: 'nonpayable',
       type: 'function',
@@ -197,13 +128,13 @@ export const AccountProvider = ({ children }) => {
           type: 'string',
         },
         {
-          internalType: 'bool',
-          name: 'hasToken',
-          type: 'bool',
+          internalType: 'string',
+          name: 'tokenName',
+          type: 'string',
         },
         {
           internalType: 'string',
-          name: 'tokenName',
+          name: 'description',
           type: 'string',
         },
       ],
@@ -329,7 +260,26 @@ export const AccountProvider = ({ children }) => {
       stateMutability: 'view',
       type: 'function',
     },
+    {
+      inputs: [
+        {
+          internalType: 'address',
+          name: '_company2',
+          type: 'address',
+        },
+        {
+          internalType: 'bool',
+          name: '_includesInEco',
+          type: 'bool',
+        },
+      ],
+      name: 'updateEcosystem',
+      outputs: [],
+      stateMutability: 'nonpayable',
+      type: 'function',
+    },
   ];
+
   const connectWallet = async () => {
     try {
       const accounts = await sdk?.connect();

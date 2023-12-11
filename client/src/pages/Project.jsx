@@ -21,7 +21,6 @@ const Tabs = styled.div`
 const Tab = styled.div`
   display: flex;
   width: 100%;
-
   flex: 1;
   padding: 10px 0px 10px 0px;
   justify-content: center;
