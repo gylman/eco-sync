@@ -1,13 +1,13 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import add from '../assets/images/add.svg';
-import del from '../assets/images/delete.svg';
-import { useAccount } from '../contexts/AccountContext';
-import { ethers } from 'ethers';
-import { Web3Provider } from '@ethersproject/providers';
-import { useLocation, useParams } from 'react-router';
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import add from "../assets/images/add.svg";
+import del from "../assets/images/delete.svg";
+import { useAccount } from "../contexts/AccountContext";
+import { ethers } from "ethers";
+import { Web3Provider } from "@ethersproject/providers";
+import { useLocation, useParams } from "react-router";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
 
 export const Field = styled.div`
   display: flex;
@@ -32,7 +32,7 @@ export const Input = styled.input`
   border: 2px solid #fff;
   background: rgba(255, 255, 255, 0);
   box-shadow: 8px 8px 8px 0px rgba(255, 199, 67, 0.7);
-  color: ${({ disabled }) => (disabled ? '#909090' : '#fff')};
+  color: ${({ disabled }) => (disabled ? "#909090" : "#fff")};
   font-family: Dosis;
   font-size: 24px;
   font-style: normal;
@@ -88,7 +88,7 @@ const ColHead = styled.p`
 `;
 
 const ColBody = styled.ul`
-  min-width: 744px;
+  min-width: 550px;
   display: flex;
   background: rgba(0, 173, 209, 0.2);
   box-shadow: 0px 4px 4px 0px rgba(0, 0, 0, 0.25);
@@ -154,25 +154,38 @@ const ECOS_QUERY = (address) => gql`
 
 const COMPANIES_QUERY = (addresses) => gql`
   {
-    companies(where: { id_in: ${JSON.stringify(addresses)} }) { id name walletAddress profilePhoto tokenName description }
+    companies(where: { id_in: ${JSON.stringify(
+      addresses
+    )} }) { id name walletAddress profilePhoto tokenName description }
   }
 `;
 
 const EcoPage = () => {
   const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
-  const [addedToEco, setAddedToEco] = useState('');
+  const [addedToEco, setAddedToEco] = useState("");
 
-
-  const ecosQuery = useQuery(ECOS_QUERY(address));
-  const companiesQuery = useQuery(COMPANIES_QUERY(ecosQuery.data?.ecos.flatMap((eco) => [eco.company1Address, eco.company2Address])));
+  const ecosQuery = useQuery(ECOS_QUERY(address), {
+    pollInterval: 10000,
+  });
+  const companiesQuery = useQuery(
+    COMPANIES_QUERY(
+      ecosQuery.data?.ecos.flatMap((eco) => [
+        eco.company1Address,
+        eco.company2Address,
+      ])
+    ),
+    {
+      pollInterval: 50000,
+    }
+  );
 
   useEffect(() => {
-    console.log('ecosQuery',ecosQuery.data, ecosQuery.error, address)
-  },[ecosQuery.data, ecosQuery.error, address])
+    console.log("ecosQuery", ecosQuery.data, ecosQuery.error, address);
+  }, [ecosQuery.data, ecosQuery.error, address]);
   useEffect(() => {
-    console.log('companiesQuery',companiesQuery.data)
-  },[companiesQuery.data])
+    console.log("companiesQuery", companiesQuery.data);
+  }, [companiesQuery.data]);
 
   const handleAddToEcoInput = (e) => {
     setAddedToEco(e.target.value);
@@ -180,18 +193,25 @@ const EcoPage = () => {
 
   const delFromEco = async (address) => {
     const provider = new Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
     const tx = await contract.updateEcosystem(address, false);
+    await ecosQuery.refetch();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await ecosQuery.refetch();
   };
 
   const addToEco = async () => {
     const provider = new Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
+    console.log("addedToEco", addedToEco);
     const tx = await contract.updateEcosystem(addedToEco, true);
+    await ecosQuery.refetch();
+    await new Promise((resolve) => setTimeout(resolve, 5000));
+    await ecosQuery.refetch();
   };
 
   return (
@@ -207,44 +227,67 @@ const EcoPage = () => {
         <Col>
           <ColHead>Includes:</ColHead>
           <ColBody>
-            {ecosQuery.data?.ecos.filter(e => e.company1Address === address)?.map(({ company2Address }) => {
-              const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company2Address);
-              return (
-                <Project key={company2Address}>
-                  <ProjectLogo src={project?.profilePhoto ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
-                    project.profilePhoto
-                  }` : undefined} />
-                  <ProjectDetails>
-                    <ProjectName>{project?.name ?? '???'}</ProjectName>
-                    <ProjectAddress>{company2Address}</ProjectAddress>
-                  </ProjectDetails>
-                  {address === account && <Del
-                    src={del}
-                    width='46px'
-                    onClick={() => delFromEco(company2Address)}
-                  />}
-                </Project>
-              )
-            })}
+            {ecosQuery.data?.ecos
+              .filter((e) => e.company1Address === address)
+              ?.map(({ company2Address }) => {
+                const project = companiesQuery.data?.companies.find(
+                  ({ walletAddress }) => walletAddress === company2Address
+                );
+                return (
+                  <Project key={company2Address}>
+                    <ProjectLogo
+                      src={
+                        project?.profilePhoto
+                          ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                              project.profilePhoto
+                            }`
+                          : undefined
+                      }
+                    />
+                    <ProjectDetails>
+                      <ProjectName>{project?.name ?? "???"}</ProjectName>
+                      <ProjectAddress>{company2Address}</ProjectAddress>
+                    </ProjectDetails>
+                    {address === account && (
+                      <Del
+                        src={del}
+                        width="46px"
+                        onClick={() => delFromEco(company2Address)}
+                      />
+                    )}
+                  </Project>
+                );
+              })}
           </ColBody>
         </Col>
         <Col>
           <ColHead>Is included in:</ColHead>
           <ColBody>
-          {ecosQuery.data?.ecos.filter(e => e.company2Address === address)?.map(({ company1Address }) => {
-              const project = companiesQuery.data?.companies.find(({ walletAddress }) => walletAddress === company1Address);
-              return (
-                <Project key={company1Address}>
-                  <ProjectLogo width='65px' src={project?.profilePhoto ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
-                    project.profilePhoto
-                  }` : undefined} />
-                  <ProjectDetails>
-                    <ProjectName>{project?.name ?? '???'}</ProjectName>
-                    <ProjectAddress>{company1Address}</ProjectAddress>
-                  </ProjectDetails>
-                </Project>
-              );
-            })}
+            {ecosQuery.data?.ecos
+              .filter((e) => e.company2Address === address)
+              ?.map(({ company1Address }) => {
+                const project = companiesQuery.data?.companies.find(
+                  ({ walletAddress }) => walletAddress === company1Address
+                );
+                return (
+                  <Project key={company1Address}>
+                    <ProjectLogo
+                      width="65px"
+                      src={
+                        project?.profilePhoto
+                          ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+                              project.profilePhoto
+                            }`
+                          : undefined
+                      }
+                    />
+                    <ProjectDetails>
+                      <ProjectName>{project?.name ?? "???"}</ProjectName>
+                      <ProjectAddress>{company1Address}</ProjectAddress>
+                    </ProjectDetails>
+                  </Project>
+                );
+              })}
           </ColBody>
         </Col>
       </Cols>
