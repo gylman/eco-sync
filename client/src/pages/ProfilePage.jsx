@@ -190,6 +190,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Name</Label>
             <Input
+              placeholder='Enter your project title'
               defaultValue={data?.company?.name}
               onChange={handleName}
               readOnly={loading || !!data.company}
@@ -198,6 +199,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Token</Label>
             <Input
+              placeholder='What token do you issue?'
               defaultValue={data?.company?.tokenName}
               onChange={handleToken}
               readOnly={loading || !!data.company}
@@ -206,6 +208,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Description</Label>
             <TextArea
+              placeholder='What is your project about?'
               defaultValue={data?.company?.description}
               onChange={handleDescription}
               readOnly={loading || !!data.company}
