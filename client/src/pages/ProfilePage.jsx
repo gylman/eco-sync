@@ -80,7 +80,7 @@ export const Input = styled.input`
 
 const USERS_QUERY = (address) => gql`
   {
-    company(id: "${address}") { id name walletAddress profilePhoto }
+    company(id: "${address}") { id name walletAddress profilePhoto tokenName description }
   }
 `;
 
@@ -96,6 +96,19 @@ const ProfilePage = () => {
   const [hasToken, setHasToken] = useState(false);
   const [token, setToken] = useState('');
   const [description, setDescription] = useState('');
+
+  useEffect(() => {
+    if (data?.company) {
+      console.log(`${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+        data.company.profilePhoto
+      }`)
+      setLogo({
+        src: `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+          data.company.profilePhoto
+        }`,
+      })
+    }
+  },[data])
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -166,7 +179,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Token</Label>
             <Input
-              defaultValue={data?.company?.token}
+              defaultValue={data?.company?.tokenName}
               onChange={handleToken}
               readOnly={loading || !!data.company}
             />
