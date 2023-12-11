@@ -218,11 +218,11 @@ const EcoPage = () => {
                     <ProjectName>{project?.name ?? '???'}</ProjectName>
                     <ProjectAddress>{company2Address}</ProjectAddress>
                   </ProjectDetails>
-                  <Del
+                  {address === account && <Del
                     src={del}
                     width='46px'
                     onClick={() => delFromEco(company2Address)}
-                  />
+                  />}
                 </Project>
               )
             })}
@@ -245,7 +245,7 @@ const EcoPage = () => {
                 </Project>
               );
             })}
-          </ColBody>{' '}
+          </ColBody>
         </Col>
       </Cols>
     </EcoContent>
