@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
+import React, { useState } from "react";
+import styled from "styled-components";
 
 const Circle = styled.label`
   display: flex;
@@ -23,7 +23,7 @@ const HiddenInput = styled.input`
 
 const CircleImageUploader = ({ image = null, setImage, disabled }) => {
   const handleImageChange = (e) => {
-    if (!disabled) return;
+    if (disabled) return;
 
     const file = e.target.files[0];
     const reader = new FileReader();
@@ -44,13 +44,13 @@ const CircleImageUploader = ({ image = null, setImage, disabled }) => {
     <div>
       <HiddenInput
         disabled={disabled}
-        type='file'
-        id='image-upload'
+        type="file"
+        id="image-upload"
         onChange={handleImageChange}
-        accept='image/*'
+        accept="image/*"
       />
-      <Circle htmlFor='image-upload' imgsrc={image?.src}>
-        {!image?.src && '+'}
+      <Circle htmlFor="image-upload" imgsrc={image?.src}>
+        {!image?.src && "+"}
       </Circle>
     </div>
   );

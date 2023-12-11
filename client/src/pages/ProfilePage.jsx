@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import radius from '../assets/images/radius.png';
-import { Button } from './RootLayout';
-import { useAccount } from '../contexts/AccountContext';
-import CircleImageUploader from '../components/CircleImageUploader';
-import { ethers } from 'ethers';
-import { Web3Provider } from '@ethersproject/providers';
-import { uploadFile } from '../utils';
-import { useLocation, useParams } from 'react-router';
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
-import Loader from '../components/Loader';
+import React, { useEffect, useState } from "react";
+import styled from "styled-components";
+import radius from "../assets/images/radius.png";
+import { Button } from "./RootLayout";
+import { useAccount } from "../contexts/AccountContext";
+import CircleImageUploader from "../components/CircleImageUploader";
+import { ethers } from "ethers";
+import { Web3Provider } from "@ethersproject/providers";
+import { uploadFile } from "../utils";
+import { useLocation, useParams } from "react-router";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+import Loader from "../components/Loader";
 
 const Content = styled.div`
   padding-top: 64px;
@@ -71,7 +71,7 @@ export const Input = styled.input`
   border: 2px solid #fff;
   background: rgba(255, 255, 255, 0);
   box-shadow: 8px 8px 8px 0px rgba(255, 199, 67, 0.7);
-  color: ${({ disabled }) => (disabled ? '#909090' : '#fff')};
+  color: ${({ disabled }) => (disabled ? "#909090" : "#fff")};
   font-family: Dosis;
   font-size: 24px;
   font-style: normal;
@@ -89,7 +89,7 @@ const TextArea = styled.textarea`
   border: 2px solid #fff;
   background: rgba(255, 255, 255, 0);
   box-shadow: 8px 8px 8px 0px rgba(255, 199, 67, 0.7);
-  color: ${({ disabled }) => (disabled ? '#909090' : '#fff')};
+  color: ${({ disabled }) => (disabled ? "#909090" : "#fff")};
   font-family: Dosis;
   font-size: 24px;
   font-style: normal;
@@ -111,10 +111,10 @@ const ProfilePage = () => {
   const { loading, error, data } = useQuery(USERS_QUERY(address));
 
   const [logo, setLogo] = useState(null);
-  const [name, setName] = useState('');
+  const [name, setName] = useState("");
   const [hasToken, setHasToken] = useState(false);
-  const [token, setToken] = useState('');
-  const [description, setDescription] = useState('');
+  const [token, setToken] = useState("");
+  const [description, setDescription] = useState("");
 
   useEffect(() => {
     if (data?.company) {
@@ -152,17 +152,17 @@ const ProfilePage = () => {
     }
 
     const provider = new Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
     // upload company logo file
     if (!logo) {
-      alert('Please upload a logo');
+      alert("Please upload a logo");
       return;
     }
 
     const response = await uploadFile(
-      `${account}.${/** @type {File} */ (logo.file).name.split('.').at(-1)}`,
+      `${account}.${/** @type {File} */ (logo.file).name.split(".").at(-1)}`,
       logo.file
     );
     // console.log('response', response);
@@ -188,7 +188,7 @@ const ProfilePage = () => {
         <CircleImageUploader
           image={logo}
           setImage={setLogo}
-          disabled={!!logo?.src && !logo?.file}
+          disabled={!data || (!!data.company && !!logo?.src && !logo?.file)}
         />
       </Logo>
       <FieldsAndButton>
@@ -200,7 +200,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Name</Label>
             <Input
-              placeholder='Enter your project title'
+              placeholder="Enter your project title"
               defaultValue={data?.company?.name}
               onChange={handleName}
               readOnly={loading || !!data.company}
@@ -209,7 +209,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Token</Label>
             <Input
-              placeholder='What token do you issue?'
+              placeholder="What token do you issue?"
               defaultValue={data?.company?.tokenName}
               onChange={handleToken}
               readOnly={loading || !!data.company}
@@ -218,7 +218,7 @@ const ProfilePage = () => {
           <Field>
             <Label>Description</Label>
             <TextArea
-              placeholder='What is your project about?'
+              placeholder="What is your project about?"
               defaultValue={data?.company?.description}
               onChange={handleDescription}
               readOnly={loading || !!data.company}
