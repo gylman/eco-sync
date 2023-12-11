@@ -78,6 +78,24 @@ export const Input = styled.input`
   line-height: normal;
 `;
 
+const TextArea = styled.textarea`
+  display: flex;
+  min-width: 520px;
+  width: 100%;
+  padding: 9px 14px;
+  align-items: center;
+  border-radius: 10px;
+  border: 2px solid #fff;
+  background: rgba(255, 255, 255, 0);
+  box-shadow: 8px 8px 8px 0px rgba(255, 199, 67, 0.7);
+  color: ${({ disabled }) => (disabled ? '#909090' : '#fff')};
+  font-family: Dosis;
+  font-size: 24px;
+  font-style: normal;
+  font-weight: 500;
+  line-height: normal;
+`;
+
 const USERS_QUERY = (address) => gql`
   {
     company(id: "${address}") { id name walletAddress profilePhoto }
@@ -105,6 +123,7 @@ const ProfilePage = () => {
   };
   const handleDescription = (e) => {
     setDescription(e.target.value);
+    console.log(description);
   };
 
   useEffect(() => {
@@ -173,7 +192,7 @@ const ProfilePage = () => {
           </Field>
           <Field>
             <Label>Description</Label>
-            <Input
+            <TextArea
               defaultValue={data?.company?.description}
               onChange={handleDescription}
               readOnly={loading || !!data.company}
