@@ -17,19 +17,26 @@ const Container = styled.div`
   align-items: center;
   padding: 50px;
   overflow: scroll;
+  border-radius: 10px;
 `;
 
 const Row = styled.div`
   display: flex;
+  border-radius: 10px;
+  &:nth-child(odd) {
+    background: #020538;
+  }
+  &:nth-child(even) {
+    background-color: #050b69;
+  }
 `;
 
 const ColHead = styled.p`
   color: #fff;
   font-family: Dosis;
-  font-size: 32px;
+  font-size: 39px;
   font-style: normal;
   font-weight: 700;
-  border: 4px solid #fff;
   padding: 20px;
   width: 400px;
   display: flex;
@@ -43,13 +50,15 @@ const ColCell = styled.p`
   font-size: 32px;
   font-style: normal;
   font-weight: 700;
-  border: 4px solid #fff;
   padding: 20px;
   width: 400px;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #021538;
+`;
+
+const Logo = styled.img`
+  border-radius: 50%;
 `;
 
 const includes = [
@@ -171,16 +180,16 @@ const GlobalPage = () => {
   return (
     <Container>
       <Row>
-        <ColHead>Project</ColHead>
-        <ColHead>Logo</ColHead>
-        <ColHead>Includes</ColHead>
-        <ColHead>Included in</ColHead>
+        <ColHead>PROJECT</ColHead>
+        <ColHead>LOGO</ColHead>
+        <ColHead>INCLUDES</ColHead>
+        <ColHead>INCLUDED IN</ColHead>
       </Row>
       {includes.map((project) => (
         <Row key={cuid()}>
           <ColCell>{project.name}</ColCell>
           <ColCell>
-            <img src={project.logo} width='65px' />
+            <Logo src={project.logo} width='65px' />
           </ColCell>
           <ColCell>{project.numHas}</ColCell>
           <ColCell>{project.numIn}</ColCell>
