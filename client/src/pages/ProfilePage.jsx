@@ -10,6 +10,7 @@ import { uploadFile } from '../utils';
 import { useLocation, useParams } from 'react-router';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
+import Loader from '../components/Loader';
 
 const Content = styled.div`
   padding-top: 64px;
@@ -117,16 +118,18 @@ const ProfilePage = () => {
 
   useEffect(() => {
     if (data?.company) {
-      console.log(`${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
-        data.company.profilePhoto
-      }`)
+      console.log(
+        `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
+          data.company.profilePhoto
+        }`
+      );
       setLogo({
         src: `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
           data.company.profilePhoto
         }`,
-      })
+      });
     }
-  },[data])
+  }, [data]);
 
   const handleName = (e) => {
     setName(e.target.value);
@@ -179,9 +182,14 @@ const ProfilePage = () => {
 
   return (
     <Content>
+      {loading && <Loader />}
       <Logo>
         <Label>Logo</Label>
-        <CircleImageUploader image={logo} setImage={setLogo} disabled={!!logo?.src && !logo?.file} />
+        <CircleImageUploader
+          image={logo}
+          setImage={setLogo}
+          disabled={!!logo?.src && !logo?.file}
+        />
       </Logo>
       <FieldsAndButton>
         <Fields>

@@ -3,6 +3,7 @@ import cuid from 'cuid';
 import { useNavigate } from 'react-router';
 import gql from 'graphql-tag';
 import { useQuery } from '@apollo/react-hooks';
+import Loader from '../components/Loader';
 
 const Container = styled.div`
   width: 100%;
@@ -84,6 +85,8 @@ const GlobalPage = () => {
 
   return (
     <Container>
+      {loading && <Loader />}
+
       <Row>
         <ColHead>LOGO</ColHead>
         <ColHead>PROJECT</ColHead>
