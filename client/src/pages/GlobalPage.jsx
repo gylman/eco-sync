@@ -26,6 +26,9 @@ const Row = styled.div`
   &:hover img {
     filter: invert(100%);
   }
+  &:first-child {
+    filter: invert(0%);
+  }
   &:nth-child(odd) {
     background: #020538;
   }

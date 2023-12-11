@@ -26,7 +26,6 @@ const Tab = styled.div`
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  border-radius: 0px 0px 30px 30px;
   cursor: pointer;
   background: ${({ active }) =>
     active
