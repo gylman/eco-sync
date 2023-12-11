@@ -1,14 +1,14 @@
-import { useEffect, useState } from 'react';
-import styled from 'styled-components';
-import add from '../assets/images/add.svg';
-import del from '../assets/images/delete.svg';
-import { useAccount } from '../contexts/AccountContext';
-import { ethers } from 'ethers';
-import { Web3Provider } from '@ethersproject/providers';
-import { useLocation, useParams } from 'react-router';
-import gql from 'graphql-tag';
-import { useQuery } from '@apollo/react-hooks';
-import Loader from '../components/Loader';
+import { useEffect, useState } from "react";
+import styled from "styled-components";
+import add from "../assets/images/add.svg";
+import del from "../assets/images/delete.svg";
+import { useAccount } from "../contexts/AccountContext";
+import { ethers } from "ethers";
+import { Web3Provider } from "@ethersproject/providers";
+import { useLocation, useParams } from "react-router";
+import gql from "graphql-tag";
+import { useQuery } from "@apollo/react-hooks";
+import Loader from "../components/Loader";
 
 export const Field = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ export const Input = styled.input`
   border: 2px solid #fff;
   background: rgba(255, 255, 255, 0);
   box-shadow: 8px 8px 8px 0px rgba(255, 199, 67, 0.7);
-  color: ${({ disabled }) => (disabled ? '#909090' : '#fff')};
+  color: ${({ disabled }) => (disabled ? "#909090" : "#fff")};
   font-family: Dosis;
   font-size: 24px;
   font-style: normal;
@@ -137,6 +137,7 @@ const ProjectAddress = styled.p`
 `;
 
 const Del = styled.img`
+  margin-left: auto;
   cursor: pointer;
   &:hover {
     transform: scale(1.05);
@@ -164,7 +165,7 @@ const COMPANIES_QUERY = (addresses) => gql`
 const EcoPage = () => {
   const { address } = useParams();
   const { account, contractAddress, contractABI } = useAccount();
-  const [addedToEco, setAddedToEco] = useState('');
+  const [addedToEco, setAddedToEco] = useState("");
 
   const ecosQuery = useQuery(ECOS_QUERY(address), {
     pollInterval: 10000,
@@ -182,10 +183,10 @@ const EcoPage = () => {
   );
 
   useEffect(() => {
-    console.log('ecosQuery', ecosQuery.data, ecosQuery.error, address);
+    console.log("ecosQuery", ecosQuery.data, ecosQuery.error, address);
   }, [ecosQuery.data, ecosQuery.error, address]);
   useEffect(() => {
-    console.log('companiesQuery', companiesQuery.data);
+    console.log("companiesQuery", companiesQuery.data);
   }, [companiesQuery.data]);
 
   const handleAddToEcoInput = (e) => {
@@ -194,7 +195,7 @@ const EcoPage = () => {
 
   const delFromEco = async (address) => {
     const provider = new Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
     const tx = await contract.updateEcosystem(address, false);
@@ -205,10 +206,10 @@ const EcoPage = () => {
 
   const addToEco = async () => {
     const provider = new Web3Provider(window.ethereum);
-    await provider.send('eth_requestAccounts', []);
+    await provider.send("eth_requestAccounts", []);
     const signer = provider.getSigner();
     const contract = new ethers.Contract(contractAddress, contractABI, signer);
-    console.log('addedToEco', addedToEco);
+    console.log("addedToEco", addedToEco);
     const tx = await contract.updateEcosystem(addedToEco, true);
     await ecosQuery.refetch();
     await new Promise((resolve) => setTimeout(resolve, 5000));
@@ -247,13 +248,13 @@ const EcoPage = () => {
                       }
                     />
                     <ProjectDetails>
-                      <ProjectName>{project?.name ?? '???'}</ProjectName>
+                      <ProjectName>{project?.name ?? "???"}</ProjectName>
                       <ProjectAddress>{company2Address}</ProjectAddress>
                     </ProjectDetails>
                     {address === account && (
                       <Del
                         src={del}
-                        width='46px'
+                        width="46px"
                         onClick={() => delFromEco(company2Address)}
                       />
                     )}
@@ -274,7 +275,7 @@ const EcoPage = () => {
                 return (
                   <Project key={company1Address}>
                     <ProjectLogo
-                      width='65px'
+                      width="65px"
                       src={
                         project?.profilePhoto
                           ? `${import.meta.env.VITE_PINATA_GATEWAY}/ipfs/${
@@ -284,7 +285,7 @@ const EcoPage = () => {
                       }
                     />
                     <ProjectDetails>
-                      <ProjectName>{project?.name ?? '???'}</ProjectName>
+                      <ProjectName>{project?.name ?? "???"}</ProjectName>
                       <ProjectAddress>{company1Address}</ProjectAddress>
                     </ProjectDetails>
                   </Project>
