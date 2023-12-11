@@ -21,17 +21,18 @@ const Tabs = styled.div`
 const Tab = styled.div`
   display: flex;
   width: 100%;
+
   flex: 1;
   padding: 10px 0px 10px 0px;
   justify-content: center;
   align-items: center;
   flex-shrink: 0;
-  border-radius: 0px 0px 200px 200px;
+  border-radius: 0px 0px 30px 30px;
   cursor: pointer;
   background: ${({ active }) =>
     active
-      ? 'linear-gradient(90deg, #bb98e9 1.8%, #5100bb 94.91%)'
-      : 'linear-gradient(180deg, rgba(187, 152, 233, 0.50) 0%, rgba(81, 0, 187, 0.00) 100%)'};
+      ? 'linear-gradient(90deg, #483D8B 1.8%, #4B0082 94.91%)' // Dark blue to violet for active
+      : 'linear-gradient(180deg, rgba(72, 61, 139, 0.50) 0%, rgba(75, 0, 130, 0.00) 100%)'}; // Lighter gradient for inactive
 `;
 
 const Text = styled.p`
